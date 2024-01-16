@@ -1,6 +1,6 @@
 import { GridColDef } from "@mui/x-data-grid";
 import DataTable from "../../components/dataTable/DataTable";
-import "./Users.scss";
+import "./users.scss";
 import { useState, useEffect } from "react";
 import Add from "../../components/add/Add";
 import axios from "axios";
