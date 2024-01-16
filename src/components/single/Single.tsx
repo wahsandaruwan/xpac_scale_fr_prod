@@ -1,16 +1,7 @@
-import {
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import "./single.scss";
 
-const Single = ({ userData }) => {
-  function separateDateAndTime(dateTimeString) {
+const Single = ({ userData }: { userData: any }) => {
+  function separateDateAndTime(dateTimeString: any) {
     let dateTime = new Date(dateTimeString);
 
     if (isNaN(dateTime.getTime())) {

@@ -1,7 +1,6 @@
 import {
   Legend,
   Line,
-  PieChart,
   LineChart,
   ResponsiveContainer,
   Tooltip,
@@ -17,7 +16,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-const SingleDevice = ({ deviceRecentData }) => {
+const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
   // Users data
   const [ChartData, SetChartData] = useState([]);
 
@@ -71,7 +70,7 @@ const SingleDevice = ({ deviceRecentData }) => {
     }
   };
 
-  function separateDateAndTime(dateTimeString) {
+  function separateDateAndTime(dateTimeString: any) {
     let dateTime = new Date(dateTimeString);
 
     if (isNaN(dateTime.getTime())) {

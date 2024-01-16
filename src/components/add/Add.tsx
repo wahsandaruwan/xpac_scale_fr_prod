@@ -9,7 +9,6 @@ type Props = {
 };
 
 const Add = (props: Props) => {
-
   // TEST THE API
 
   // const queryClient = useQueryClient();
@@ -44,7 +43,7 @@ const Add = (props: Props) => {
 
     //add new item
     // mutation.mutate();
-    props.setOpen(false)
+    props.setOpen(false);
   };
   return (
     <div className="add">

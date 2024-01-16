@@ -1,5 +1,4 @@
 import SingleDevice from "../../components/SingleDevice/SingleDevice";
-import { singleProduct } from "../../data";
 import "./product.scss";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";

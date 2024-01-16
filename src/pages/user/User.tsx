@@ -1,5 +1,4 @@
 import Single from "../../components/single/Single";
-import { singleUser } from "../../data";
 import "./user.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";

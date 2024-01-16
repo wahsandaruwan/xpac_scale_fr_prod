@@ -1,20 +1,16 @@
-import BarChartBox from "../../components/barChartBox/BarChartBox";
 import DeviceCountChart from "../../components/DeviceCountChart/DeviceCountChart";
 import ChartBox from "../../components/chartBox/ChartBox";
-import PieChartBox from "../../components/pieCartBox/PieChartBox";
-import TopBox from "../../components/topBox/TopBox";
-import {
-  barChartBoxRevenue,
-  barChartBoxVisit,
-  chartBoxConversion,
-  chartBoxProduct,
-  chartBoxRevenue,
-  chartBoxUser,
-} from "../../data";
 import "./home.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import DeviceCustomerCountChart from "../../components/DeviceCustomerCountChart/DeviceCustomerCountChart";
+
+interface CountDataType {
+  deviceCount: number;
+  itemCount: number;
+  adminCount: number;
+  customerCount: number;
+}
 
 const Home = () => {
   // Device count data
@@ -24,7 +20,7 @@ const Home = () => {
   const [CustomerDeviceCountData, SetCustomerDeviceCountData] = useState({});
 
   // Customer device count data
-  const [CountData, SetCountData] = useState({});
+  const [CountData, SetCountData] = useState<CountDataType | null>(null);
 
   useEffect(() => {
     fetchDeviceCountData();
@@ -73,9 +69,9 @@ const Home = () => {
       console.log(response.data.data);
 
       const combinedArray = response.data.data.customerCounts.map(
-        (customerCountItem) => {
+        (customerCountItem: any) => {
           const deviceCountItem = response.data.data.deviceCounts.find(
-            (deviceCount) => deviceCount.date === customerCountItem.date
+            (deviceCount: any) => deviceCount.date === customerCountItem.date
           );
 
           return {
@@ -115,41 +111,39 @@ const Home = () => {
 
   return (
     <div className="home">
-      {/* <div className="box box1">
-        <TopBox />
-      </div> */}
-      <div className="box box2">
-        <ChartBox
-          title="Total Customers"
-          count={CountData.customerCount}
-          icon="/userIcon.svg"
-        />
-      </div>
+      {CountData ? (
+        <>
+          <div className="box box2">
+            <ChartBox
+              title="Total Customers"
+              count={CountData.customerCount}
+              icon="/userIcon.svg"
+            />
+          </div>
 
-      <div className="box box3">
-        <ChartBox
-          title="Total Admins"
-          count={CountData.adminCount}
-          icon="/productIcon.svg"
-        />
-      </div>
-      {/* <div className="box box4">
-        <PieChartBox />
-      </div> */}
-      <div className="box box5">
-        <ChartBox
-          title="Total Devices"
-          count={CountData.deviceCount}
-          icon="/conversionIcon.svg"
-        />
-      </div>
-      <div className="box box6">
-        <ChartBox
-          title="Total Items"
-          count={CountData.itemCount}
-          icon="/revenueIcon.svg"
-        />
-      </div>
+          <div className="box box3">
+            <ChartBox
+              title="Total Admins"
+              count={CountData.adminCount}
+              icon="/productIcon.svg"
+            />
+          </div>
+          <div className="box box5">
+            <ChartBox
+              title="Total Devices"
+              count={CountData.deviceCount}
+              icon="/conversionIcon.svg"
+            />
+          </div>
+          <div className="box box6">
+            <ChartBox
+              title="Total Items"
+              count={CountData?.itemCount}
+              icon="/revenueIcon.svg"
+            />
+          </div>
+        </>
+      ) : null}
       <div className="box box7">
         <DeviceCountChart bigChartData={DeviceCountData} />
       </div>
