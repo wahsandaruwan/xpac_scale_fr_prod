@@ -50,7 +50,7 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
   // Fetch device count data
   const fetchChartData = async () => {
     const headers = {
-      token: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTllNDc5Zjc5ODg5NGJkM2JlYTFmZTciLCJ1c2VyVHlwZSI6ImFkbWluIiwiaWF0IjoxNzA1MzA1ODI1LCJleHAiOjE3MDUzOTIyMjV9.I5DMKbG54idiqm_IP8nEf7XqJCK3QkUWKZTjuh3jOg4`,
+      token: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTllNDc5Zjc5ODg5NGJkM2JlYTFmZTciLCJ1c2VyVHlwZSI6ImFkbWluIiwiaWF0IjoxNzA1Mzk0Mjg5LCJleHAiOjE3MDU0ODA2ODl9.Lnp_qM-h0tTZxwqA3FKZcOdRcXNNntibs5d8T6cRKAg`,
     };
 
     try {
