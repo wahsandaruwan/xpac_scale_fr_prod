@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Assuming you're using react-router-dom
 
 import "./add.scss";
 
@@ -14,7 +13,6 @@ type Props = {
 const Add = (props: Props) => {
   const [formData, setFormData] = useState<{ [key: string]: string }>({});
   const [formData1, setFormData1] = useState<{ [key: string]: string }>({});
-  const navigate = useNavigate();
 
   const setAdditionalData = () => {
     setFormData((prevData) => ({
@@ -45,9 +43,15 @@ const Add = (props: Props) => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    if (props.slug == "Products") {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    }
+
+    if (props.slug == "Users") {
+      setFormData1((prevData) => ({ ...prevData, [name]: value }));
+    }
   };
 
   const addDevice = async () => {
@@ -94,27 +98,27 @@ const Add = (props: Props) => {
       };
 
       // Check if required fields are not empty
-      if (!formData.fullName) {
+      if (!formData1.fullName) {
         alert("Please provide a valid full name.");
         return;
       }
-      if (!formData.emailAddress) {
+      if (!formData1.emailAddress) {
         alert("Please provide a valid email address");
         return;
       }
-      if (!formData.phoneNumber) {
+      if (!formData1.phoneNumber) {
         alert("Please provide a valid phone number");
         return;
       }
-      if (!formData.address) {
+      if (!formData1.address) {
         alert("Please provide a valid address");
         return;
       }
-      if (!formData.userRole) {
+      if (!formData1.userRole) {
         alert("Please provide a valid user role");
         return;
       }
-      if (!formData.password) {
+      if (!formData1.password) {
         alert("Please provide a valid password");
         return;
       }
@@ -122,7 +126,7 @@ const Add = (props: Props) => {
       try {
         const response = await axios.post(
           "http://104.245.34.253:3300/api/users/register",
-          formData,
+          formData1,
           { headers }
         );
 
@@ -151,7 +155,13 @@ const Add = (props: Props) => {
                 <label>{column.headerName}</label>
 
                 {column.field == "userRole" ? (
-                  <select id="userRole" name="userRole">
+                  <select
+                    id="userRole"
+                    name={column.field}
+                    value={formData[column.field] || ""}
+                    style={{ padding: "10px" }}
+                    onChange={handleInputChange}
+                  >
                     <option value="customer">Customer</option>
                     <option value="moderator">Moderator</option>
                     <option value="admin">Admin</option>
