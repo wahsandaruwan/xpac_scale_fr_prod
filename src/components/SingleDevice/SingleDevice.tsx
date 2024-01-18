@@ -16,7 +16,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Circle from "../circle/Circle";
-import * as XLSX from "xlsx";
+import XLSX from "xlsx";
 
 const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
   // Users data
