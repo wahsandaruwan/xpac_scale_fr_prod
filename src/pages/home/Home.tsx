@@ -153,7 +153,7 @@ const Home = () => {
             <ChartBox
               title="Total Customers"
               count={CountData.customerCount}
-              icon="/userIcon.svg"
+              icon="/customers1.svg"
             />
           </div>
 
@@ -161,21 +161,21 @@ const Home = () => {
             <ChartBox
               title="Total Admins"
               count={CountData.adminCount}
-              icon="/productIcon.svg"
+              icon="/admins1.svg"
             />
           </div>
           <div className="box box5">
             <ChartBox
               title="Total Devices"
               count={CountData.deviceCount}
-              icon="/conversionIcon.svg"
+              icon="/devices1.svg"
             />
           </div>
           <div className="box box6">
             <ChartBox
               title="Total Items"
               count={CountData?.itemCount}
-              icon="/revenueIcon.svg"
+              icon="/itemlist1.svg"
             />
           </div>
         </>

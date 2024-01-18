@@ -5,11 +5,13 @@ const Circle = ({
   value,
   unVal,
   bgColor,
+  icon,
 }: {
   title: string;
   value: string;
   unVal: string;
   bgColor: string;
+  icon: string;
 }) => {
   return (
     <div
@@ -34,7 +36,11 @@ const Circle = ({
             : "#3076e6",
       }}
     >
-      {/* <img src={icon} alt="" /> */}
+      <img
+        src={icon}
+        style={{ width: "40px", height: "40px", marginBottom: "5px" }}
+        alt=""
+      />
       <p
         className="circle-text"
         style={{ color: "#000000", fontSize: "0.8rem" }}

@@ -180,6 +180,7 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
                   }
                   unVal={deviceRecentData[0].deviceData.itemCount}
                   bgColor="#f78f5e"
+                  icon="/items1.svg"
                 />
                 <Circle
                   title="Total Weight"
@@ -190,6 +191,7 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
                   }
                   unVal={deviceRecentData[0].deviceData.totalWeight}
                   bgColor="#f0f75e"
+                  icon="/weight1.svg"
                 />
                 <Circle
                   title="Battery Percentage"
@@ -202,6 +204,7 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
                   }
                   unVal={deviceRecentData[0].deviceData.batteryPercentage}
                   bgColor="#5e99f7"
+                  icon="/battery1.svg"
                 />
                 <Circle
                   title="Battery Voltage"
@@ -212,6 +215,7 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
                   }
                   unVal={deviceRecentData[0].deviceData.batteryVoltage}
                   bgColor="#b583f2"
+                  icon="/voltage1.svg"
                 />
               </div>
             </div>
