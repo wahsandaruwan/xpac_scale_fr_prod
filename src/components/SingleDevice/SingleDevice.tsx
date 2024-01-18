@@ -15,6 +15,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Circle from "../circle/Circle";
 
 const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
   // Users data
@@ -170,112 +171,48 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
                   alignItems: "flex-start",
                 }}
               >
-                <div
-                  style={{
-                    width: "200px",
-                    height: "200px",
-                    borderRadius: "50%",
-                    backgroundColor: "#f78f5e",
-                    margin: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                  }}
-                >
-                  <p style={{ color: "#000000" }}>Item Count</p>
-                  <p
-                    style={{
-                      color: "#000000",
-                      marginTop: "10px",
-                      fontSize: "2rem",
-                    }}
-                  >
-                    {deviceRecentData[0].deviceData.itemCount < 10
+                <Circle
+                  title="Item Count"
+                  value={
+                    deviceRecentData[0].deviceData.itemCount < 10
                       ? "0" + deviceRecentData[0].deviceData.itemCount
-                      : deviceRecentData[0].deviceData.itemCount}
-                  </p>
-                </div>
-                <div
-                  style={{
-                    width: "200px",
-                    height: "200px",
-                    borderRadius: "50%",
-                    backgroundColor: "#f0f75e",
-                    margin: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                  }}
-                >
-                  <p style={{ color: "#000000" }}>Total Weight</p>
-                  <p
-                    style={{
-                      color: "#000000",
-                      marginTop: "10px",
-                      fontSize: "2rem",
-                    }}
-                  >
-                    {deviceRecentData[0].deviceData.totalWeight < 10
+                      : deviceRecentData[0].deviceData.itemCount
+                  }
+                  unVal={deviceRecentData[0].deviceData.itemCount}
+                  bgColor="#f78f5e"
+                />
+                <Circle
+                  title="Total Weight"
+                  value={
+                    deviceRecentData[0].deviceData.totalWeight < 10
                       ? "0" + deviceRecentData[0].deviceData.totalWeight + "g"
-                      : deviceRecentData[0].deviceData.totalWeight + "g"}
-                  </p>
-                </div>
-                <div
-                  style={{
-                    width: "200px",
-                    height: "200px",
-                    borderRadius: "50%",
-                    backgroundColor: "#5e99f7",
-                    margin: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                  }}
-                >
-                  <p style={{ color: "#000000" }}>Battery Percentage</p>
-                  <p
-                    style={{
-                      color: "#000000",
-                      marginTop: "10px",
-                      fontSize: "2rem",
-                    }}
-                  >
-                    {deviceRecentData[0].deviceData.batteryPercentage < 10
+                      : deviceRecentData[0].deviceData.totalWeight + "g"
+                  }
+                  unVal={deviceRecentData[0].deviceData.totalWeight}
+                  bgColor="#f0f75e"
+                />
+                <Circle
+                  title="Battery Percentage"
+                  value={
+                    deviceRecentData[0].deviceData.batteryPercentage < 10
                       ? "0" +
                         deviceRecentData[0].deviceData.batteryPercentage +
                         "%"
-                      : deviceRecentData[0].deviceData.batteryPercentage + "%"}
-                  </p>
-                </div>
-                <div
-                  style={{
-                    width: "200px",
-                    height: "200px",
-                    borderRadius: "50%",
-                    backgroundColor: "#b583f2",
-                    margin: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                  }}
-                >
-                  <p style={{ color: "#000000" }}>Battery Voltage</p>
-                  <p
-                    style={{
-                      color: "#000000",
-                      marginTop: "10px",
-                      fontSize: "2rem",
-                    }}
-                  >
-                    {deviceRecentData[0].deviceData.batteryVoltage % 1 === 0
+                      : deviceRecentData[0].deviceData.batteryPercentage + "%"
+                  }
+                  unVal={deviceRecentData[0].deviceData.batteryPercentage}
+                  bgColor="#5e99f7"
+                />
+                <Circle
+                  title="Battery Voltage"
+                  value={
+                    deviceRecentData[0].deviceData.batteryVoltage % 1 === 0
                       ? deviceRecentData[0].deviceData.batteryVoltage + ".0"
-                      : deviceRecentData[0].deviceData.batteryVoltage.toString()}
-                  </p>
-                </div>
+                      : deviceRecentData[0].deviceData.batteryVoltage.toString()
+                  }
+                  unVal={deviceRecentData[0].deviceData.batteryVoltage}
+                  bgColor="#b583f2"
+                />
               </div>
             </div>
           </div>
