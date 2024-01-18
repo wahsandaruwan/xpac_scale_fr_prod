@@ -95,6 +95,7 @@ const popupColumns: GridColDef[] = [
 
 const Users = () => {
   const [open, setOpen] = useState(false);
+  const [UserType, SetUserType] = useState("");
 
   // Users data
   const [UsersData, SetUsersData] = useState([]);
@@ -114,6 +115,11 @@ const Users = () => {
 
   useEffect(() => {
     fetchUsers();
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      SetUserType(storedUser.userType);
+    }
   }, []);
 
   // Fetch device count data
@@ -143,7 +149,9 @@ const Users = () => {
     <div className="users">
       <div className="info">
         <h1>All Users</h1>
-        <button onClick={() => setOpen(true)}>Add New User</button>
+        {UserType == "admin" ? (
+          <button onClick={() => setOpen(true)}>Add New User</button>
+        ) : null}
       </div>
       {UsersData.length > 0 ? (
         <DataTable slug="users" columns={columns} rows={UsersData} />

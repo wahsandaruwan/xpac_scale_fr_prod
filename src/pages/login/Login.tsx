@@ -54,7 +54,11 @@ export default function Login() {
       );
       console.log(response.data);
       localStorage.setItem("user", JSON.stringify(response.data));
-      navigate("/");
+      if (response.data.userType == "customer") {
+        navigate("/products");
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       // Handle errors here
       console.error("Error fetching data:", error);
