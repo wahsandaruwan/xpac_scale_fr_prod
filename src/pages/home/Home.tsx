@@ -4,6 +4,7 @@ import "./home.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import DeviceCustomerCountChart from "../../components/DeviceCustomerCountChart/DeviceCustomerCountChart";
+import { useNavigate } from "react-router-dom";
 
 interface CountDataType {
   deviceCount: number;
@@ -11,6 +12,12 @@ interface CountDataType {
   adminCount: number;
   customerCount: number;
 }
+
+// interface AuthDataType {
+//   accessToken: string;
+//   userId: string;
+//   userType: string;
+// }
 
 const Home = () => {
   // Device count data
@@ -21,6 +28,23 @@ const Home = () => {
 
   // Customer device count data
   const [CountData, SetCountData] = useState<CountDataType | null>(null);
+
+  // Auth user
+  // const [AuthUser, SetAuthUser] = useState<AuthDataType | null>(null);
+  // console.log(AuthUser);
+
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      console.log(storedUser);
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  }, []);
 
   useEffect(() => {
     fetchDeviceCountData();
@@ -39,73 +63,85 @@ const Home = () => {
 
   // Fetch device count data
   const fetchDeviceCountData = async () => {
-    const headers = {
-      token: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTllNDc5Zjc5ODg5NGJkM2JlYTFmZTciLCJ1c2VyVHlwZSI6ImFkbWluIiwiaWF0IjoxNzA1Mzk0Mjg5LCJleHAiOjE3MDU0ODA2ODl9.Lnp_qM-h0tTZxwqA3FKZcOdRcXNNntibs5d8T6cRKAg`,
-    };
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
 
-    try {
-      const response = await axios.get(
-        "http://104.245.34.253:3300/api/summary/get-device-count",
-        { headers }
-      );
-      SetDeviceCountData(response.data.data);
-    } catch (error) {
-      // Handle errors here
-      console.error("Error fetching data:", error);
+      try {
+        const response = await axios.get(
+          "http://104.245.34.253:3300/api/summary/get-device-count",
+          { headers }
+        );
+        SetDeviceCountData(response.data.data);
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
     }
   };
 
   // Fetch customer device data
   const fetchDeviceCustomerCountData = async () => {
-    const headers = {
-      token: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTllNDc5Zjc5ODg5NGJkM2JlYTFmZTciLCJ1c2VyVHlwZSI6ImFkbWluIiwiaWF0IjoxNzA1Mzk0Mjg5LCJleHAiOjE3MDU0ODA2ODl9.Lnp_qM-h0tTZxwqA3FKZcOdRcXNNntibs5d8T6cRKAg`,
-    };
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
 
-    try {
-      const response = await axios.get(
-        "http://104.245.34.253:3300/api/summary/get-customer-device-count",
-        { headers }
-      );
-      console.log(response.data.data);
+      try {
+        const response = await axios.get(
+          "http://104.245.34.253:3300/api/summary/get-customer-device-count",
+          { headers }
+        );
+        console.log(response.data.data);
 
-      const combinedArray = response.data.data.customerCounts.map(
-        (customerCountItem: any) => {
-          const deviceCountItem = response.data.data.deviceCounts.find(
-            (deviceCount: any) => deviceCount.date === customerCountItem.date
-          );
+        const combinedArray = response.data.data.customerCounts.map(
+          (customerCountItem: any) => {
+            const deviceCountItem = response.data.data.deviceCounts.find(
+              (deviceCount: any) => deviceCount.date === customerCountItem.date
+            );
 
-          return {
-            date: customerCountItem.date,
-            customerCount: customerCountItem.count,
-            deviceCount: deviceCountItem ? deviceCountItem.count : 0,
-          };
-        }
-      );
+            return {
+              date: customerCountItem.date,
+              customerCount: customerCountItem.count,
+              deviceCount: deviceCountItem ? deviceCountItem.count : 0,
+            };
+          }
+        );
 
-      SetCustomerDeviceCountData(combinedArray);
-    } catch (error) {
-      // Handle errors here
-      console.error("Error fetching data:", error);
+        SetCustomerDeviceCountData(combinedArray);
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
     }
   };
 
   // Fetch count data
   const fetchCountData = async () => {
-    const headers = {
-      token: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTllNDc5Zjc5ODg5NGJkM2JlYTFmZTciLCJ1c2VyVHlwZSI6ImFkbWluIiwiaWF0IjoxNzA1Mzk0Mjg5LCJleHAiOjE3MDU0ODA2ODl9.Lnp_qM-h0tTZxwqA3FKZcOdRcXNNntibs5d8T6cRKAg`,
-    };
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
 
-    try {
-      const response = await axios.get(
-        "http://104.245.34.253:3300/api/summary/count",
-        { headers }
-      );
-      console.log(response.data.data);
+      try {
+        const response = await axios.get(
+          "http://104.245.34.253:3300/api/summary/count",
+          { headers }
+        );
+        console.log(response.data.data);
 
-      SetCountData(response.data.data);
-    } catch (error) {
-      // Handle errors here
-      console.error("Error fetching data:", error);
+        SetCountData(response.data.data);
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
     }
   };
 

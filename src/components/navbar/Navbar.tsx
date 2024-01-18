@@ -1,6 +1,16 @@
 import "./navbar.scss";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const logOut = () => {
+    const userConfirmed = window.confirm("Do you want to proceed?");
+
+    if (userConfirmed) {
+      localStorage.removeItem("user");
+      navigate("/login");
+    }
+  };
   return (
     <div className="navbar">
       <div className="logo">
@@ -27,6 +37,7 @@ const Navbar = () => {
           alt=""
           className="icon"
           style={{ width: "40px", cursor: "pointer" }}
+          onClick={() => logOut()}
         />
       </div>
     </div>

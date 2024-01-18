@@ -9,7 +9,7 @@ import {
 } from "recharts";
 import "./singleDevice.scss";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -22,6 +22,22 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
 
   // Chart type
   const [ChartType, SetChartType] = useState("monthly");
+
+  const params = useParams();
+  console.log(params);
+
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      console.log(storedUser);
+      navigate("/products/" + params.id);
+    } else {
+      navigate("/login");
+    }
+  }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
     SetChartType(event.target.value as string);
@@ -42,31 +58,32 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
     fetchChartData();
   }, [ChartType]);
 
-  const params = useParams();
-  console.log(params);
-
   console.log("first");
 
   // Fetch device count data
   const fetchChartData = async () => {
-    const headers = {
-      token: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTllNDc5Zjc5ODg5NGJkM2JlYTFmZTciLCJ1c2VyVHlwZSI6ImFkbWluIiwiaWF0IjoxNzA1Mzk0Mjg5LCJleHAiOjE3MDU0ODA2ODl9.Lnp_qM-h0tTZxwqA3FKZcOdRcXNNntibs5d8T6cRKAg`,
-    };
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
 
-    try {
-      const response = await axios.get(
-        "http://104.245.34.253:3300/api/device/all/" +
-          params.id +
-          "?period=" +
-          ChartType,
-        { headers }
-      );
-      console.log("first");
-      console.log(response.data.weighingDeviceData[0].deviceData);
-      SetChartData(response.data.weighingDeviceData[0].deviceData);
-    } catch (error) {
-      // Handle errors here
-      console.error("Error fetching data:", error);
+      try {
+        const response = await axios.get(
+          "http://104.245.34.253:3300/api/device/all/" +
+            params.id +
+            "?period=" +
+            ChartType,
+          { headers }
+        );
+        console.log("first");
+        console.log(response.data.weighingDeviceData[0].deviceData);
+        SetChartData(response.data.weighingDeviceData[0].deviceData);
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
     }
   };
 

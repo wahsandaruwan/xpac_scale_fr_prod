@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Add from "../../components/add/Add";
 import axios from "axios";
 // import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const columns: GridColDef[] = [
   {
@@ -65,26 +66,43 @@ const Users = () => {
   // Users data
   const [UsersData, SetUsersData] = useState([]);
 
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      console.log(storedUser);
+      navigate("/users");
+    } else {
+      navigate("/login");
+    }
+  }, []);
+
   useEffect(() => {
     fetchUsers();
   }, []);
 
   // Fetch device count data
   const fetchUsers = async () => {
-    const headers = {
-      token: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTllNDc5Zjc5ODg5NGJkM2JlYTFmZTciLCJ1c2VyVHlwZSI6ImFkbWluIiwiaWF0IjoxNzA1Mzk0Mjg5LCJleHAiOjE3MDU0ODA2ODl9.Lnp_qM-h0tTZxwqA3FKZcOdRcXNNntibs5d8T6cRKAg`,
-    };
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
 
-    try {
-      const response = await axios.get(
-        "http://104.245.34.253:3300/api/users/all",
-        { headers }
-      );
-      console.log(response.data.customers);
-      SetUsersData(response.data.customers);
-    } catch (error) {
-      // Handle errors here
-      console.error("Error fetching data:", error);
+      try {
+        const response = await axios.get(
+          "http://104.245.34.253:3300/api/users/all",
+          { headers }
+        );
+        console.log(response.data.customers);
+        SetUsersData(response.data.customers);
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
     }
   };
 

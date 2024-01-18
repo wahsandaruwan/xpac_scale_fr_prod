@@ -1,12 +1,28 @@
 import SingleDevice from "../../components/SingleDevice/SingleDevice";
 import "./product.scss";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Product = () => {
   // Users data
   const [DeviceRecentData, SetDeviceRecentData] = useState([]);
+
+  const params = useParams();
+  console.log(params);
+
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      console.log(storedUser);
+      navigate("/products/" + params.id);
+    } else {
+      navigate("/login");
+    }
+  }, []);
 
   useEffect(() => {
     fetchDeviceRecentData();
@@ -19,28 +35,29 @@ const Product = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const params = useParams();
-  console.log(params);
-
   console.log("first");
 
   // Fetch device count data
   const fetchDeviceRecentData = async () => {
-    const headers = {
-      token: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTllNDc5Zjc5ODg5NGJkM2JlYTFmZTciLCJ1c2VyVHlwZSI6ImFkbWluIiwiaWF0IjoxNzA1Mzk0Mjg5LCJleHAiOjE3MDU0ODA2ODl9.Lnp_qM-h0tTZxwqA3FKZcOdRcXNNntibs5d8T6cRKAg`,
-    };
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
 
-    try {
-      const response = await axios.get(
-        "http://104.245.34.253:3300/api/device/one/" + params.id,
-        { headers }
-      );
-      console.log("first");
-      console.log(response.data.weighingDeviceData);
-      SetDeviceRecentData(response.data.weighingDeviceData);
-    } catch (error) {
-      // Handle errors here
-      console.error("Error fetching data:", error);
+      try {
+        const response = await axios.get(
+          "http://104.245.34.253:3300/api/device/one/" + params.id,
+          { headers }
+        );
+        console.log("first");
+        console.log(response.data.weighingDeviceData);
+        SetDeviceRecentData(response.data.weighingDeviceData);
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
     }
   };
 
