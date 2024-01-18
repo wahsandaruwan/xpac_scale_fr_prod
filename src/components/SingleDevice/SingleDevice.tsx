@@ -16,6 +16,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Circle from "../circle/Circle";
+import * as XLSX from "xlsx";
 
 const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
   // Users data
@@ -105,6 +106,16 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
     };
   }
 
+  const convertToExcel = (data: any) => {
+    console.log(data[0]);
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    //let buffer = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
+    //XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
+    XLSX.writeFile(workbook, "DataSheet.xlsx");
+  };
+
   return (
     <div className="single">
       {deviceRecentData.length > 0 ? (
@@ -113,7 +124,11 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
             <div className="topInfo">
               <img src="/scale.svg" alt="" />
               <h1>{deviceRecentData[0].title}</h1>
-              {/* <button>Update</button> */}
+              <button
+                onClick={() => convertToExcel([deviceRecentData[0].deviceData])}
+              >
+                Download Excel
+              </button>
             </div>
             <div
               style={{

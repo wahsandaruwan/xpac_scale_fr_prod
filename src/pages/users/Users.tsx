@@ -80,21 +80,15 @@ const popupColumns: GridColDef[] = [
     flex: 1,
   },
   {
-    field: "address",
-    type: "string",
-    headerName: "Address",
-    flex: 1,
-  },
-  {
     field: "phoneNumber",
     type: "string",
     headerName: "Phone Number",
     flex: 1,
   },
   {
-    field: "userRole",
+    field: "userType",
     type: "string",
-    headerName: "User Role",
+    headerName: "User Type",
     flex: 1,
   },
 ];

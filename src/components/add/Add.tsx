@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 
@@ -12,25 +12,26 @@ type Props = {
 
 const Add = (props: Props) => {
   const [formData, setFormData] = useState<{ [key: string]: string }>({});
-  const [formData1, setFormData1] = useState<{ [key: string]: string }>({});
 
-  const setAdditionalData = () => {
-    setFormData((prevData) => ({
-      ...prevData,
-      imageUrl: "sfsasf",
-      assignedItem: "ssfsfsf",
-      dateCreated: "sdfsdf",
-      timeCreated: "sdfsdf",
-      dateUpdated: "sdfsdf",
-      timeUpdated: "sdfsdf",
-    }));
-  };
+  // const setAdditionalData = () => {
+  //   if (props.slug == "Products") {
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       imageUrl: "sfsasf",
+  //       assignedItem: "ssfsfsf",
+  //       dateCreated: "sdfsdf",
+  //       timeCreated: "sdfsdf",
+  //       dateUpdated: "sdfsdf",
+  //       timeUpdated: "sdfsdf",
+  //     }));
+  //   }
+  // };
 
   console.log(formData);
 
-  useEffect(() => {
-    setAdditionalData();
-  }, []);
+  // useEffect(() => {
+  //   setAdditionalData();
+  // }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,14 +44,14 @@ const Add = (props: Props) => {
     }
   };
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (props.slug == "Products") {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
 
     if (props.slug == "Users") {
-      setFormData1((prevData) => ({ ...prevData, [name]: value }));
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
   };
 
@@ -83,7 +84,7 @@ const Add = (props: Props) => {
         alert("Successfuly added the device!");
         props.setOpen(false);
       } catch (error) {
-        alert("Something went wrong, Check the connection!");
+        alert("Something went wrong, Please check your connection!");
         console.error("Error fetching data:", error);
       }
     }
@@ -98,27 +99,23 @@ const Add = (props: Props) => {
       };
 
       // Check if required fields are not empty
-      if (!formData1.fullName) {
+      if (!formData.fullName) {
         alert("Please provide a valid full name.");
         return;
       }
-      if (!formData1.emailAddress) {
+      if (!formData.emailAddress) {
         alert("Please provide a valid email address");
         return;
       }
-      if (!formData1.phoneNumber) {
+      if (!formData.phoneNumber) {
         alert("Please provide a valid phone number");
         return;
       }
-      if (!formData1.address) {
-        alert("Please provide a valid address");
+      if (!formData.userType) {
+        alert("Please provide a valid user type");
         return;
       }
-      if (!formData1.userRole) {
-        alert("Please provide a valid user role");
-        return;
-      }
-      if (!formData1.password) {
+      if (!formData.password) {
         alert("Please provide a valid password");
         return;
       }
@@ -126,15 +123,15 @@ const Add = (props: Props) => {
       try {
         const response = await axios.post(
           "http://104.245.34.253:3300/api/users/register",
-          formData1,
+          formData,
           { headers }
         );
 
         console.log(response.data);
-        alert("Successfuly added the device!");
+        alert("Successfuly added the user!");
         props.setOpen(false);
       } catch (error) {
-        alert("Something went wrong, Please check your internet connection!");
+        alert("Something went wrong, Please check your connection!");
         console.error("Error fetching data:", error);
       }
     }
@@ -153,14 +150,20 @@ const Add = (props: Props) => {
             .map((column) => (
               <div className="item" key={column.field}>
                 <label>{column.headerName}</label>
+                <input
+                  type={column.type}
+                  name={column.field}
+                  placeholder={column.field}
+                  value={formData[column.field] || ""}
+                  onChange={handleInputChange}
+                />
 
-                {column.field == "userRole" ? (
+                {/* {column.field == "userType" ? (
                   <select
                     id="userRole"
                     name={column.field}
                     value={formData[column.field] || ""}
                     style={{ padding: "10px" }}
-                    onChange={handleInputChange}
                   >
                     <option value="customer">Customer</option>
                     <option value="moderator">Moderator</option>
@@ -174,7 +177,7 @@ const Add = (props: Props) => {
                     value={formData[column.field] || ""}
                     onChange={handleInputChange}
                   />
-                )}
+                )} */}
               </div>
             ))}
           <button type="submit">Save</button>
