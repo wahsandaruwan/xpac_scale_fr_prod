@@ -1,6 +1,9 @@
+import React, { useState, useEffect } from "react";
 import { GridColDef } from "@mui/x-data-grid";
+import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Assuming you're using react-router-dom
+
 import "./add.scss";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type Props = {
   slug: string;
@@ -9,59 +12,162 @@ type Props = {
 };
 
 const Add = (props: Props) => {
-  // TEST THE API
+  const [formData, setFormData] = useState<{ [key: string]: string }>({});
+  const [formData1, setFormData1] = useState<{ [key: string]: string }>({});
+  const navigate = useNavigate();
 
-  // const queryClient = useQueryClient();
+  const setAdditionalData = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      imageUrl: "sfsasf",
+      assignedItem: "ssfsfsf",
+      dateCreated: "sdfsdf",
+      timeCreated: "sdfsdf",
+      dateUpdated: "sdfsdf",
+      timeUpdated: "sdfsdf",
+    }));
+  };
 
-  // const mutation = useMutation({
-  //   mutationFn: () => {
-  //     return fetch(`http://localhost:8800/api/${props.slug}s`, {
-  //       method: "post",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         id: 111,
-  //         img: "",
-  //         lastName: "Hello",
-  //         firstName: "Test",
-  //         email: "testme@gmail.com",
-  //         phone: "123 456 789",
-  //         createdAt: "01.02.2023",
-  //         verified: true,
-  //       }),
-  //     });
-  //   },
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries([`all${props.slug}s`]);
-  //   },
-  // });
+  console.log(formData);
+
+  useEffect(() => {
+    setAdditionalData();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (props.slug == "Products") {
+      addDevice();
+    }
 
-    //add new item
-    // mutation.mutate();
-    props.setOpen(false);
+    if (props.slug == "Users") {
+      addUser();
+    }
   };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const addDevice = async () => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
+
+      // Check if required fields are not empty
+      if (!formData.title) {
+        alert("Please provide a valid device title.");
+        return;
+      }
+      if (!formData.userId) {
+        alert("Please provide a valid user id.");
+        return;
+      }
+
+      try {
+        const response = await axios.post(
+          "http://104.245.34.253:3300/api/device/add-device/",
+          formData,
+          { headers }
+        );
+
+        console.log(response.data);
+        alert("Successfuly added the device!");
+        props.setOpen(false);
+      } catch (error) {
+        alert("Something went wrong, Check the connection!");
+        console.error("Error fetching data:", error);
+      }
+    }
+  };
+
+  const addUser = async () => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
+
+      // Check if required fields are not empty
+      if (!formData.fullName) {
+        alert("Please provide a valid full name.");
+        return;
+      }
+      if (!formData.emailAddress) {
+        alert("Please provide a valid email address");
+        return;
+      }
+      if (!formData.phoneNumber) {
+        alert("Please provide a valid phone number");
+        return;
+      }
+      if (!formData.address) {
+        alert("Please provide a valid address");
+        return;
+      }
+      if (!formData.userRole) {
+        alert("Please provide a valid user role");
+        return;
+      }
+      if (!formData.password) {
+        alert("Please provide a valid password");
+        return;
+      }
+
+      try {
+        const response = await axios.post(
+          "http://104.245.34.253:3300/api/users/register",
+          formData,
+          { headers }
+        );
+
+        console.log(response.data);
+        alert("Successfuly added the device!");
+        props.setOpen(false);
+      } catch (error) {
+        alert("Something went wrong, Please check your internet connection!");
+        console.error("Error fetching data:", error);
+      }
+    }
+  };
+
   return (
     <div className="add">
       <div className="modal">
         <span className="close" onClick={() => props.setOpen(false)}>
           X
         </span>
-        <h1>Add new {props.slug}</h1>
+        <h1>Add New {props.slug}</h1>
         <form onSubmit={handleSubmit}>
           {props.columns
             .filter((item) => item.field !== "id" && item.field !== "img")
             .map((column) => (
-              <div className="item">
+              <div className="item" key={column.field}>
                 <label>{column.headerName}</label>
-                <input type={column.type} placeholder={column.field} />
+
+                {column.field == "userRole" ? (
+                  <select id="userRole" name="userRole">
+                    <option value="customer">Customer</option>
+                    <option value="moderator">Moderator</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                ) : (
+                  <input
+                    type={column.type}
+                    name={column.field}
+                    placeholder={column.field}
+                    value={formData[column.field] || ""}
+                    onChange={handleInputChange}
+                  />
+                )}
               </div>
             ))}
-          <button>Send</button>
+          <button type="submit">Save</button>
         </form>
       </div>
     </div>

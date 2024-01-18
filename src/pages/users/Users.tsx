@@ -60,6 +60,45 @@ const columns: GridColDef[] = [
   },
 ];
 
+const popupColumns: GridColDef[] = [
+  {
+    field: "fullName",
+    type: "string",
+    headerName: "Full Name",
+    flex: 1,
+  },
+  {
+    field: "emailAddress",
+    type: "string",
+    headerName: "Email Address",
+    flex: 1,
+  },
+  {
+    field: "password",
+    type: "string",
+    headerName: "Password",
+    flex: 1,
+  },
+  {
+    field: "address",
+    type: "string",
+    headerName: "Address",
+    flex: 1,
+  },
+  {
+    field: "phoneNumber",
+    type: "string",
+    headerName: "Phone Number",
+    flex: 1,
+  },
+  {
+    field: "userRole",
+    type: "string",
+    headerName: "User Role",
+    flex: 1,
+  },
+];
+
 const Users = () => {
   const [open, setOpen] = useState(false);
 
@@ -109,8 +148,8 @@ const Users = () => {
   return (
     <div className="users">
       <div className="info">
-        <h1>All Customers</h1>
-        {/* <button onClick={() => setOpen(true)}>Add New User</button> */}
+        <h1>All Users</h1>
+        <button onClick={() => setOpen(true)}>Add New User</button>
       </div>
       {UsersData.length > 0 ? (
         <DataTable slug="users" columns={columns} rows={UsersData} />
@@ -124,7 +163,7 @@ const Users = () => {
       ) : (
         <DataTable slug="users" columns={columns} rows={data} />
       )} */}
-      {open && <Add slug="user" columns={columns} setOpen={setOpen} />}
+      {open && <Add slug="Users" columns={popupColumns} setOpen={setOpen} />}
     </div>
   );
 };

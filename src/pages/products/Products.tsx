@@ -48,6 +48,21 @@ const columns: GridColDef[] = [
   },
 ];
 
+const popupColumns: GridColDef[] = [
+  {
+    field: "title",
+    type: "string",
+    headerName: "Title",
+    flex: 1,
+  },
+  {
+    field: "userId",
+    type: "string",
+    headerName: "Customer ID",
+    flex: 1,
+  },
+];
+
 const Products = () => {
   const [open, setOpen] = useState(false);
 
@@ -98,7 +113,7 @@ const Products = () => {
     <div className="products">
       <div className="info">
         <h1>All Devices</h1>
-        <button onClick={() => setOpen(true)}>Add New Products</button>
+        <button onClick={() => setOpen(true)}>Add New Device</button>
       </div>
       {DevicesData.length > 0 ? (
         <DataTable slug="products" columns={columns} rows={DevicesData} />
@@ -113,7 +128,7 @@ const Products = () => {
       ) : (
         <DataTable slug="products" columns={columns} rows={data} />
       )} */}
-      {open && <Add slug="product" columns={columns} setOpen={setOpen} />}
+      {open && <Add slug="Device" columns={popupColumns} setOpen={setOpen} />}
     </div>
   );
 };
