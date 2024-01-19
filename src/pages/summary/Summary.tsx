@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SummaryCard from "../../components/summaryCard/SummaryCard";
-import uuid from "react-uuid";
 
 const Summary = () => {
   // Devices data
@@ -60,10 +59,10 @@ const Summary = () => {
   return (
     <div className="home">
       {DevicesData.length > 0 ? (
-        DevicesData.map((item) =>
+        DevicesData.map((item, index) =>
           item.deviceData ? (
             <SummaryCard
-              key={uuid()}
+              key={Date.now() + index}
               id={item._id}
               deviceTitle={item.title}
               itemCount={Number(item.deviceData.itemCount)}
