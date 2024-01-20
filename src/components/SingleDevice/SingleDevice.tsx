@@ -105,15 +105,41 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
     };
   }
 
-  // const convertToExcel = (data: any) => {
-  //   console.log(data[0]);
-  //   const worksheet = XLSX.utils.json_to_sheet(data);
-  //   const workbook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-  //   //let buffer = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
-  //   //XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
-  //   XLSX.writeFile(workbook, "DataSheet.xlsx");
-  // };
+  const downloadExcel = async (data: any) => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
+
+      try {
+        const response = await axios.post(
+          "http://104.245.34.253:3300/api/excel/",
+          data,
+          { headers }
+        );
+        if (response.data.status) {
+          window.open(
+            "http://104.245.34.253:3300/downloads/device_data.xlsx",
+            "_blank"
+          );
+        }
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
+    }
+    // try {
+    //   window.open(
+    //     "http://104.245.34.253:3300/downloads/device_data.xlsx",
+    //     "_blank"
+    //   );
+    // } catch (error) {
+    //   // Handle errors here
+    //   console.error("Error fetching data:", error);
+    // }
+  };
 
   return (
     <div className="single">
@@ -123,7 +149,22 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
             <div className="topInfo">
               <img src="/scale.svg" alt="" />
               <h1>{deviceRecentData[0].title}</h1>
-              <button>Download Excel</button>
+              <button
+                onClick={() =>
+                  downloadExcel({
+                    id: deviceRecentData[0]._id,
+                    title: deviceRecentData[0].title,
+                    itemCount: deviceRecentData[0].deviceData.itemCount,
+                    totalWeight: deviceRecentData[0].deviceData.totalWeight,
+                    batteryPercentage:
+                      deviceRecentData[0].deviceData.batteryPercentage,
+                    batteryVoltage:
+                      deviceRecentData[0].deviceData.batteryVoltage,
+                  })
+                }
+              >
+                Download Excel
+              </button>
             </div>
             <div
               style={{
