@@ -115,7 +115,7 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
 
       try {
         const response = await axios.post(
-          "http://104.245.34.253:3300/api/excel/",
+          "http://104.245.34.253:3300/api/excel/device",
           data,
           { headers }
         );
@@ -130,15 +130,6 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
         console.error("Error fetching data:", error);
       }
     }
-    // try {
-    //   window.open(
-    //     "http://104.245.34.253:3300/downloads/device_data.xlsx",
-    //     "_blank"
-    //   );
-    // } catch (error) {
-    //   // Handle errors here
-    //   console.error("Error fetching data:", error);
-    // }
   };
 
   return (

@@ -15,15 +15,17 @@ const SummaryCard = ({
   return (
     <div
       style={{
-        padding: "20px",
+        padding: "15px",
         backgroundColor: "#918f8f",
         borderRadius: "10px",
       }}
     >
-      <p style={{ fontSize: "0.8 rem", color: "#000000", marginBottom: "5px" }}>
+      <p
+        style={{ fontSize: "0.65 rem", color: "#000000", marginBottom: "5px" }}
+      >
         ID : {id}
       </p>
-      <p style={{ fontSize: "0.8 rem", color: "#000000" }}>
+      <p style={{ fontSize: "0.65 rem", color: "#000000" }}>
         Device Title : {deviceTitle}
       </p>
       <div

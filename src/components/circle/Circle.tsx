@@ -17,8 +17,8 @@ const Circle = ({
     <div
       className="zooming-circle"
       style={{
-        width: "170px",
-        height: "170px",
+        width: "165px",
+        height: "165px",
         borderRadius: "50%",
         backgroundColor: bgColor,
         margin: "10px",
@@ -33,7 +33,7 @@ const Circle = ({
             ? parseFloat(unVal) < 20
               ? "red"
               : "#3076e6"
-            : "#3076e6",
+            : "rgb(48, 118, 230)",
       }}
     >
       <img

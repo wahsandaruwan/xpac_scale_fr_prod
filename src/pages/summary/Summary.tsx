@@ -56,23 +56,68 @@ const Summary = () => {
     }
   };
 
+  const downloadExcel = async (data: any) => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
+
+      try {
+        const response = await axios.post(
+          "http://104.245.34.253:3300/api/excel/devices",
+          data,
+          { headers }
+        );
+        if (response.data.status) {
+          window.open(
+            "http://104.245.34.253:3300/downloads/all_devices_data.xlsx",
+            "_blank"
+          );
+        }
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
+    }
+  };
+
   return (
-    <div className="home">
-      {DevicesData.length > 0 ? (
-        DevicesData.map((item, index) =>
-          item.deviceData ? (
-            <SummaryCard
-              key={Date.now() + index}
-              id={item._id}
-              deviceTitle={item.title}
-              itemCount={Number(item.deviceData.itemCount)}
-              batteryPercentage={Number(item.deviceData.batteryPercentage)}
-            />
-          ) : null
-        )
-      ) : (
-        <p>No Data Available...</p>
-      )}
+    <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          marginBottom: "30px",
+        }}
+      >
+        <h1>Summary</h1>
+        <button
+          onClick={() => downloadExcel(DevicesData)}
+          style={{ marginLeft: "30px" }}
+        >
+          Download Excel
+        </button>
+      </div>
+      <div className="home">
+        {DevicesData.length > 0 ? (
+          DevicesData.map((item, index) =>
+            item.deviceData ? (
+              <SummaryCard
+                key={Date.now() + index}
+                id={item._id}
+                deviceTitle={item.title}
+                itemCount={Number(item.deviceData.itemCount)}
+                batteryPercentage={Number(item.deviceData.batteryPercentage)}
+              />
+            ) : null
+          )
+        ) : (
+          <p>No Data Available...</p>
+        )}
+      </div>
     </div>
   );
 };
