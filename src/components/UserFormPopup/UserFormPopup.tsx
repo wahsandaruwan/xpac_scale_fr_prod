@@ -82,7 +82,7 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({ isOpen, onClose }) => {
           alert("Successfully created a new user!");
           onClose();
         } else {
-          alert("Failed to create a new user please check your inputs!");
+          alert("Failed to create a new user, please check your inputs!");
         }
       } catch (error) {
         alert("Failed to create a new user due to server error!");

@@ -53,13 +53,19 @@ export default function Login() {
         { headers }
       );
       console.log(response.data);
-      localStorage.setItem("user", JSON.stringify(response.data));
-      if (response.data.userType == "customer") {
-        navigate("/products");
+
+      if (response.data.status) {
+        localStorage.setItem("user", JSON.stringify(response.data));
+        if (response.data.userType == "customer") {
+          navigate("/products");
+        } else {
+          navigate("/");
+        }
       } else {
-        navigate("/");
+        alert("Failed to login, please check your inputs!");
       }
     } catch (error) {
+      alert("Failed to login due to server error!");
       // Handle errors here
       console.error("Error fetching data:", error);
     }
