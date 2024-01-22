@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import "./products.scss";
 import DataTable from "../../components/dataTable/DataTable";
-import Add from "../../components/add/Add";
 import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -46,21 +45,6 @@ const columns: GridColDef[] = [
     headerName: "Updated At",
     flex: 1,
     type: "string",
-  },
-];
-
-const popupColumns: GridColDef[] = [
-  {
-    field: "title",
-    type: "string",
-    headerName: "Title",
-    flex: 1,
-  },
-  {
-    field: "userId",
-    type: "string",
-    headerName: "Customer ID",
-    flex: 1,
   },
 ];
 
@@ -130,7 +114,7 @@ const Products = () => {
       <div className="info">
         <h1>All Devices</h1>
         {UserType == "admin" ? (
-          <button onClick={() => setIsFormOpen(true)}>Add New Device</button>
+          <button onClick={openForm}>Add New Device</button>
         ) : null}
       </div>
       {DevicesData.length > 0 ? (
