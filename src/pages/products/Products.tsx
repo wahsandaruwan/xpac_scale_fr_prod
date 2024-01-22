@@ -5,6 +5,7 @@ import Add from "../../components/add/Add";
 import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import DeviceFormPopup from "../../components/DeviceFormPopup/DeviceFormPopup";
 
 const columns: GridColDef[] = [
   { field: "_id", headerName: "ID", flex: 1 },
@@ -64,13 +65,21 @@ const popupColumns: GridColDef[] = [
 ];
 
 const Products = () => {
-  const [open, setOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [UserType, SetUserType] = useState("");
 
   // Devices data
   const [DevicesData, SetDevicesData] = useState([]);
 
   let navigate = useNavigate();
+
+  const openForm = () => {
+    setIsFormOpen(true);
+  };
+
+  const closeForm = () => {
+    setIsFormOpen(false);
+  };
 
   useEffect(() => {
     const storedUserString = localStorage.getItem("user");
@@ -121,7 +130,7 @@ const Products = () => {
       <div className="info">
         <h1>All Devices</h1>
         {UserType == "admin" ? (
-          <button onClick={() => setOpen(true)}>Add New Device</button>
+          <button onClick={() => setIsFormOpen(true)}>Add New Device</button>
         ) : null}
       </div>
       {DevicesData.length > 0 ? (
@@ -137,7 +146,7 @@ const Products = () => {
       ) : (
         <DataTable slug="products" columns={columns} rows={data} />
       )} */}
-      {open && <Add slug="Device" columns={popupColumns} setOpen={setOpen} />}
+      <DeviceFormPopup isOpen={isFormOpen} onClose={closeForm} />
     </div>
   );
 };

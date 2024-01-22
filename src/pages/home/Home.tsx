@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 interface CountDataType {
   deviceCount: number;
   itemCount: number;
-  adminCount: number;
+  modCount: number;
   customerCount: number;
 }
 
@@ -159,8 +159,8 @@ const Home = () => {
 
           <div className="box box3">
             <ChartBox
-              title="Total Admins"
-              count={CountData.adminCount}
+              title="Total Moderators"
+              count={CountData.modCount}
               icon="/admins1.svg"
             />
           </div>

@@ -45,24 +45,14 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({ isOpen, onClose }) => {
       const headers = {
         token: `Bearer ${storedUser.accessToken}`,
       };
-      if (!InputData.fullName) {
-        alert("Please provide a valid full name.");
-        return;
-      }
-      if (!InputData.emailAddress) {
-        alert("Please provide a valid email address.");
-        return;
-      }
-      if (!InputData.password) {
-        alert("Please provide a valid password.");
-        return;
-      }
-      if (!InputData.phoneNumber) {
-        alert("Please provide a valid password.");
-        return;
-      }
-      if (InputData.userType == "none") {
-        alert("Please provide a valid user type.");
+      if (
+        !InputData.fullName ||
+        !InputData.emailAddress ||
+        !InputData.password ||
+        !InputData.phoneNumber ||
+        InputData.userType === "none"
+      ) {
+        alert("Please provide valid information for all fields.");
         return;
       }
       try {
