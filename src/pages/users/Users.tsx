@@ -138,7 +138,7 @@ const Users = () => {
         <p>No Data Available...</p>
       )}
       {/* TEST THE API */}
-      <UserFormPopup isOpen={isFormOpen} onClose={closeForm} />
+      <UserFormPopup isOpen={isFormOpen} update={false} onClose={closeForm} />
     </div>
   );
 };

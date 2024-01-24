@@ -1,6 +1,18 @@
+import UserFormPopup from "../UserFormPopup/UserFormPopup";
 import "./single.scss";
+import { useState } from "react";
 
 const Single = ({ userData }: { userData: any }) => {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
+  // const openForm = () => {
+  //   setIsFormOpen(true);
+  // };
+
+  const closeForm = () => {
+    setIsFormOpen(false);
+  };
+
   function separateDateAndTime(dateTimeString: any) {
     let dateTime = new Date(dateTimeString);
 
@@ -26,7 +38,7 @@ const Single = ({ userData }: { userData: any }) => {
             <div className="topInfo">
               <img src="/noavatar.png" alt="" />
               <h1>{userData.fullName}</h1>
-              {/* <button>Update</button> */}
+              {/* <button onClick={openForm}>Edit</button> */}
             </div>
             <div className="details">
               <div className="item">
@@ -76,6 +88,7 @@ const Single = ({ userData }: { userData: any }) => {
       ) : (
         <p>No Data Available...</p>
       )}
+      <UserFormPopup isOpen={isFormOpen} update={true} onClose={closeForm} />
     </div>
   );
 };

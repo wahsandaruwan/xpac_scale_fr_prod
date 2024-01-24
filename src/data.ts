@@ -26,7 +26,7 @@ export const menu = [
         id: 2,
         title: "Profile",
         url: "/users/" + storedUser.userId,
-        icon: "user.svg",
+        icon: "profileuser1.svg",
       },
     ],
   },

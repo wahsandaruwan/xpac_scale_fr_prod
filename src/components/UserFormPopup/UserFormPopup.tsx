@@ -3,9 +3,11 @@
 import { useState } from "react";
 import "./userForm.scss"; // Import the SCSS file
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 interface UserFormPopupProps {
   isOpen: boolean;
+  update: boolean;
   onClose: () => void;
 }
 
@@ -17,7 +19,11 @@ interface UserFormState {
   userType: string;
 }
 
-const UserFormPopup: React.FC<UserFormPopupProps> = ({ isOpen, onClose }) => {
+const UserFormPopup: React.FC<UserFormPopupProps> = ({
+  isOpen,
+  update,
+  onClose,
+}) => {
   const [InputData, SetInputData] = useState<UserFormState>({
     fullName: "",
     emailAddress: "",
@@ -25,6 +31,9 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({ isOpen, onClose }) => {
     phoneNumber: "",
     userType: "none",
   });
+
+  const params = useParams();
+  console.log(params);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -39,6 +48,12 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!update) {
+      addUser();
+    }
+  };
+
+  const addUser = async () => {
     const storedUserString = localStorage.getItem("user");
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
@@ -82,10 +97,54 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  // const getUser = async () => {
+  //   const storedUserString = localStorage.getItem("user");
+  //   if (storedUserString) {
+  //     const storedUser = JSON.parse(storedUserString);
+  //     const headers = {
+  //       token: `Bearer ${storedUser.accessToken}`,
+  //     };
+  //     if (
+  //       !InputData.fullName ||
+  //       !InputData.emailAddress ||
+  //       !InputData.password ||
+  //       !InputData.phoneNumber ||
+  //       InputData.userType === "none"
+  //     ) {
+  //       alert("Please provide valid information for all fields.");
+  //       return;
+  //     }
+  //     try {
+  //       const response = await axios.post(
+  //         "http://104.245.34.253:3300/api/users/one/" + params.id,
+  //         InputData,
+  //         { headers }
+  //       );
+  //       if (response.data.status) {
+  //         SetInputData({
+  //           fullName: "",
+  //           emailAddress: "",
+  //           password: "",
+  //           phoneNumber: "",
+  //           userType: "none",
+  //         });
+  //         alert("Successfully created a new user!");
+  //         onClose();
+  //       } else {
+  //         alert("Failed to create a new user, please check your inputs!");
+  //       }
+  //     } catch (error) {
+  //       alert("Failed to create a new user due to server error!");
+  //       // Handle errors here
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   }
+  // };
+
   return (
     <div className={`popup-container ${isOpen ? "open" : "closed"}`}>
       <div className="popup-content">
-        <h2 className="heading">Add a User</h2>
+        <h2 className="heading">{!update ? "Add a User" : "Update User"}</h2>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
