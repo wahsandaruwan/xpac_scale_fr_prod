@@ -26,7 +26,7 @@ const User = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [params.id]);
 
   // Fetch device count data
   const fetchUsers = async () => {

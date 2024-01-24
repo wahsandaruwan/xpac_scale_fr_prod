@@ -115,8 +115,8 @@ const Users = () => {
           "http://104.245.34.253:3300/api/users/all",
           { headers }
         );
-        console.log(response.data.customers);
-        SetUsersData(response.data.customers);
+        console.log(response.data.users);
+        SetUsersData(response.data.users);
       } catch (error) {
         // Handle errors here
         console.error("Error fetching data:", error);
