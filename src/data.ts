@@ -1,3 +1,10 @@
+// Access logged in users information
+const storedUserString = localStorage.getItem("user");
+let storedUser: any = "";
+if (storedUserString) {
+  storedUser = JSON.parse(storedUserString);
+}
+
 export const menu = [
   {
     id: 1,
@@ -15,12 +22,12 @@ export const menu = [
         url: "/summary",
         icon: "summary.svg",
       },
-      // {
-      //   id: 2,
-      //   title: "Profile",
-      //   url: "/users/1",
-      //   icon: "user.svg",
-      // },
+      {
+        id: 2,
+        title: "Profile",
+        url: "/users/" + storedUser.userId,
+        icon: "user.svg",
+      },
     ],
   },
   {
