@@ -1,12 +1,14 @@
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import "./dataTable.scss";
 import { Link } from "react-router-dom";
+import axios from "axios";
 // import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type Props = {
   columns: GridColDef[];
   rows: object[];
   slug: string;
+  statusChange: (val: string) => void;
 };
 
 const DataTable = (props: Props) => {
@@ -24,10 +26,87 @@ const DataTable = (props: Props) => {
   // //   }
   // // });
 
-  const handleDelete = (id: number) => {
-    //delete the item
-    // mutation.mutate(id)
-    console.log(id);
+  const handleDelete = async (id: any) => {
+    const userConfirmed = window.confirm("Do you want to proceed?");
+
+    if (userConfirmed) {
+      if (props.slug == "rules") {
+        const storedUserString = localStorage.getItem("user");
+        if (storedUserString) {
+          const storedUser = JSON.parse(storedUserString);
+          const headers = {
+            token: `Bearer ${storedUser.accessToken}`,
+          };
+
+          try {
+            const response = await axios.delete(
+              "http://104.245.34.253:3300/api/rules/delete/" + id,
+              { headers }
+            );
+
+            if (response.data.status) {
+              alert(response.data.success.message);
+              props.statusChange("delete");
+            } else {
+              alert(response.data.error.message);
+            }
+          } catch (error) {
+            // Handle errors here
+            console.error("Error fetching data:", error);
+          }
+        }
+      } else if (props.slug == "products") {
+        const storedUserString = localStorage.getItem("user");
+        if (storedUserString) {
+          const storedUser = JSON.parse(storedUserString);
+          const headers = {
+            token: `Bearer ${storedUser.accessToken}`,
+          };
+
+          try {
+            const response = await axios.delete(
+              "http://104.245.34.253:3300/api/device/delete-device/" + id,
+              { headers }
+            );
+
+            if (response.data.status) {
+              alert(response.data.success.message);
+              props.statusChange("delete");
+            } else {
+              alert(response.data.error.message);
+            }
+          } catch (error) {
+            // Handle errors here
+            console.error("Error fetching data:", error);
+          }
+        }
+      } else if (props.slug == "users") {
+        const storedUserString = localStorage.getItem("user");
+        if (storedUserString) {
+          const storedUser = JSON.parse(storedUserString);
+          const headers = {
+            token: `Bearer ${storedUser.accessToken}`,
+          };
+
+          try {
+            const response = await axios.delete(
+              "http://104.245.34.253:3300/api/users/delete/" + id,
+              { headers }
+            );
+
+            if (response.data.status) {
+              alert(response.data.success.message);
+              props.statusChange("delete");
+            } else {
+              alert(response.data.error.message);
+            }
+          } catch (error) {
+            // Handle errors here
+            console.error("Error fetching data:", error);
+          }
+        }
+      }
+    }
   };
 
   const actionColumn: GridColDef = {
@@ -40,7 +119,7 @@ const DataTable = (props: Props) => {
           <Link to={`/${props.slug}/${params.row._id}`}>
             <img src="/vieweye.svg" alt="" />
           </Link>
-          <div className="delete" onClick={() => handleDelete(params.row.id)}>
+          <div className="delete" onClick={() => handleDelete(params.row._id)}>
             <img src="/delete.svg" alt="" />
           </div>
         </div>

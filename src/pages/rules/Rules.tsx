@@ -55,6 +55,9 @@ const Rules = () => {
   // Rules data
   const [RulesData, SetRulesData] = useState([]);
 
+  // Status
+  const [Status, SetStatus] = useState("none");
+
   let navigate = useNavigate();
 
   const openForm = () => {
@@ -88,7 +91,7 @@ const Rules = () => {
 
   useEffect(() => {
     fetchRules();
-  }, [isFormOpen]);
+  }, [isFormOpen, Status]);
 
   // Fetch devices
   const fetchRules = async () => {
@@ -113,6 +116,10 @@ const Rules = () => {
     }
   };
 
+  const updateStatus = (val: string) => {
+    SetStatus(val);
+  };
+
   return (
     <div className="products">
       <div className="info">
@@ -122,7 +129,12 @@ const Rules = () => {
         ) : null}
       </div>
       {RulesData.length > 0 ? (
-        <DataTable slug="rules" columns={columns} rows={RulesData} />
+        <DataTable
+          slug="rules"
+          statusChange={updateStatus}
+          columns={columns}
+          rows={RulesData}
+        />
       ) : (
         <p>No Data Available...</p>
       )}

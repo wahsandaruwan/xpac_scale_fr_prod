@@ -43,6 +43,9 @@ const Products = () => {
   // Devices data
   const [DevicesData, SetDevicesData] = useState([]);
 
+  // Status
+  const [Status, SetStatus] = useState("none");
+
   let navigate = useNavigate();
 
   const openForm = () => {
@@ -76,7 +79,7 @@ const Products = () => {
 
   useEffect(() => {
     fetchDevices();
-  }, [isFormOpen]);
+  }, [isFormOpen, Status]);
 
   // Fetch devices
   const fetchDevices = async () => {
@@ -101,6 +104,10 @@ const Products = () => {
     }
   };
 
+  const updateStatus = (val: string) => {
+    SetStatus(val);
+  };
+
   return (
     <div className="products">
       <div className="info">
@@ -110,7 +117,12 @@ const Products = () => {
         ) : null}
       </div>
       {DevicesData.length > 0 ? (
-        <DataTable slug="products" columns={columns} rows={DevicesData} />
+        <DataTable
+          slug="products"
+          statusChange={updateStatus}
+          columns={columns}
+          rows={DevicesData}
+        />
       ) : (
         <p>No Data Available...</p>
       )}

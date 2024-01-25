@@ -67,6 +67,9 @@ const Users = () => {
   // Users data
   const [UsersData, SetUsersData] = useState([]);
 
+  // Status
+  const [Status, SetStatus] = useState("none");
+
   let navigate = useNavigate();
 
   const openForm = () => {
@@ -99,7 +102,7 @@ const Users = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [isFormOpen]);
+  }, [isFormOpen, Status]);
 
   // Fetch device count data
   const fetchUsers = async () => {
@@ -124,6 +127,10 @@ const Users = () => {
     }
   };
 
+  const updateStatus = (val: string) => {
+    SetStatus(val);
+  };
+
   return (
     <div className="users">
       <div className="info">
@@ -133,7 +140,12 @@ const Users = () => {
         ) : null}
       </div>
       {UsersData.length > 0 ? (
-        <DataTable slug="users" columns={columns} rows={UsersData} />
+        <DataTable
+          slug="users"
+          statusChange={updateStatus}
+          columns={columns}
+          rows={UsersData}
+        />
       ) : (
         <p>No Data Available...</p>
       )}
