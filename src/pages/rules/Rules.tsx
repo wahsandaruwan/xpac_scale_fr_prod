@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import "./products.scss";
+import "./rules.scss";
 import DataTable from "../../components/dataTable/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import DeviceFormPopup from "../../components/DeviceFormPopup/DeviceFormPopup";
+import RuleFormPopup from "../../components/RuleFormPopup/RuleFormPopup";
 
 const columns: GridColDef[] = [
   { field: "_id", headerName: "ID", flex: 1 },
@@ -13,13 +13,25 @@ const columns: GridColDef[] = [
     headerName: "Image",
     flex: 1,
     renderCell: (params) => {
-      return <img src={params.row.img || "/scaless.svg"} alt="" />;
+      return <img src={params.row.img || "/ruleb.svg"} alt="" />;
     },
   },
   {
-    field: "title",
+    field: "userId",
     type: "string",
-    headerName: "Title",
+    headerName: "User Id",
+    flex: 1,
+  },
+  {
+    field: "deviceId",
+    type: "string",
+    headerName: "Device Id",
+    flex: 1,
+  },
+  {
+    field: "emailStatus",
+    type: "string",
+    headerName: "Email Status",
     flex: 1,
   },
   {
@@ -36,12 +48,12 @@ const columns: GridColDef[] = [
   },
 ];
 
-const Products = () => {
+const Rules = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [UserType, SetUserType] = useState("");
 
-  // Devices data
-  const [DevicesData, SetDevicesData] = useState([]);
+  // Rules data
+  const [RulesData, SetRulesData] = useState([]);
 
   let navigate = useNavigate();
 
@@ -58,14 +70,14 @@ const Products = () => {
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
       console.log(storedUser);
-      navigate("/products");
+      navigate("/rules");
     } else {
       navigate("/login");
     }
   }, []);
 
   useEffect(() => {
-    fetchDevices();
+    fetchRules();
 
     const storedUserString = localStorage.getItem("user");
     if (storedUserString) {
@@ -75,11 +87,11 @@ const Products = () => {
   }, []);
 
   useEffect(() => {
-    fetchDevices();
+    fetchRules();
   }, [isFormOpen]);
 
   // Fetch devices
-  const fetchDevices = async () => {
+  const fetchRules = async () => {
     const storedUserString = localStorage.getItem("user");
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
@@ -89,11 +101,11 @@ const Products = () => {
 
       try {
         const response = await axios.get(
-          "http://104.245.34.253:3300/api/device/all",
+          "http://104.245.34.253:3300/api/rules/all",
           { headers }
         );
-        console.log(response.data.devices);
-        SetDevicesData(response.data.devices);
+        console.log(response.data.rules);
+        SetRulesData(response.data.rules);
       } catch (error) {
         // Handle errors here
         console.error("Error fetching data:", error);
@@ -104,13 +116,13 @@ const Products = () => {
   return (
     <div className="products">
       <div className="info">
-        <h1>All Devices</h1>
+        <h1>All Rules</h1>
         {UserType == "admin" ? (
-          <button onClick={openForm}>Add New Device</button>
+          <button onClick={openForm}>Add New Rule</button>
         ) : null}
       </div>
-      {DevicesData.length > 0 ? (
-        <DataTable slug="products" columns={columns} rows={DevicesData} />
+      {RulesData.length > 0 ? (
+        <DataTable slug="rules" columns={columns} rows={RulesData} />
       ) : (
         <p>No Data Available...</p>
       )}
@@ -122,9 +134,9 @@ const Products = () => {
       ) : (
         <DataTable slug="products" columns={columns} rows={data} />
       )} */}
-      <DeviceFormPopup isOpen={isFormOpen} onClose={closeForm} />
+      <RuleFormPopup isOpen={isFormOpen} onClose={closeForm} />
     </div>
   );
 };
 
-export default Products;
+export default Rules;

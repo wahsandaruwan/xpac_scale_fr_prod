@@ -11,6 +11,7 @@ import "./styles/global.scss";
 import User from "./pages/user/User";
 import Product from "./pages/product/Product";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Rules from "./pages/rules/Rules";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,10 @@ function App() {
         {
           path: "/products/:id",
           element: <Product />,
+        },
+        {
+          path: "/rules",
+          element: <Rules />,
         },
       ],
     },

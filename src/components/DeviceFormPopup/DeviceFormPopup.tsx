@@ -13,32 +13,20 @@ interface DeviceFormState {
   title: string;
   imageUrl: string;
   assignedItem: string;
-  users: Array<UsersState>;
   dateCreated: string;
   timeCreated: string;
   dateUpdated: string;
   timeUpdated: string;
 }
 
-interface UsersState {
-  id: string;
-  status: string;
-}
-
 const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [UserData, SetUserData] = useState<UsersState>({
-    id: "none",
-    status: "none",
-  });
-  const [UsersData, SetUsersData] = useState([]);
   const [InputData, SetInputData] = useState<DeviceFormState>({
     title: "",
     imageUrl: "1",
-    assignedItem: "1",
-    users: UsersData,
+    assignedItem: "659e479f798894bd3bea1fe7",
     dateCreated: "2023-01-22",
     timeCreated: "16:08",
     dateUpdated: "2023-01-22",
@@ -50,10 +38,6 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
   ) => {
     const { name, value } = event.target;
     // Use the spread operator to copy the existing state
-    SetUserData({
-      ...UserData,
-      [name]: value,
-    });
     SetInputData({
       ...InputData,
       [name]: value,
@@ -79,29 +63,22 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
           { headers }
         );
         if (response.data.status) {
-          SetUserData({
-            id: "",
-            status: "none",
-          });
-          SetUsersData([]);
           SetInputData({
             title: "",
             imageUrl: "1",
-            assignedItem: "1",
-            users: UsersData,
+            assignedItem: "659e479f798894bd3bea1fe7",
             dateCreated: "2023-01-22",
             timeCreated: "16:08",
             dateUpdated: "2023-01-22",
             timeUpdated: "16:08",
           });
-          alert("Successfully created a new device!");
+          alert(response.data.success.message);
           onClose();
         } else {
-          alert("Failed to create a new device, please check your inputs!");
+          alert(response.data.error.message);
         }
-      } catch (error) {
-        alert("Failed to create a new device due to server error!");
-        // Handle errors here
+      } catch (error: any) {
+        alert(error.response.data.error.message);
         console.error("Error fetching data:", error);
       }
     }
@@ -120,7 +97,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
             className="form-input"
             placeholder="Device Title"
           />
-          <br />
+          {/* <br />
           <div className="user-select">
             <select
               name="id"
@@ -151,7 +128,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
               Add
             </button>
           </div>
-          <br />
+          <br /> */}
           {/* <div>
             <p>Users</p>
             <div>
@@ -168,16 +145,10 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
           <button
             type="button"
             onClick={() => {
-              SetUserData({
-                id: "none",
-                status: "none",
-              });
-              SetUsersData([]);
               SetInputData({
                 title: "",
                 imageUrl: "1",
-                assignedItem: "1",
-                users: UsersData,
+                assignedItem: "659e479f798894bd3bea1fe7",
                 dateCreated: "2023-01-22",
                 timeCreated: "16:08",
                 dateUpdated: "2023-01-22",

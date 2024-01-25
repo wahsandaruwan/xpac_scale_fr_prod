@@ -62,11 +62,10 @@ export default function Login() {
           navigate("/");
         }
       } else {
-        alert("Failed to login, please check your inputs!");
+        alert(response.data.error.message);
       }
-    } catch (error) {
-      alert("Failed to login due to server error!");
-      // Handle errors here
+    } catch (error: any) {
+      alert(error.response.data.error.message);
       console.error("Error fetching data:", error);
     }
   };

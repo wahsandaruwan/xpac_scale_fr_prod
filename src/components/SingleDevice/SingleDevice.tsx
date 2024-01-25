@@ -175,12 +175,12 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
                   {deviceRecentData[0].assignedItem}
                 </span>
               </div> */}
-                <div className="item">
+                {/* <div className="item">
                   <span className="itemTitle">User Id : </span>
                   <span className="itemValue">
                     {deviceRecentData[0].userId}
                   </span>
-                </div>
+                </div> */}
                 <div className="item">
                   <span className="itemTitle">Created Date : </span>
                   <span className="itemValue">

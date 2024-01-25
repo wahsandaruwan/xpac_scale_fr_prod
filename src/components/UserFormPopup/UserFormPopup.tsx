@@ -84,13 +84,13 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
             phoneNumber: "",
             userType: "none",
           });
-          alert("Successfully created a new user!");
+          alert(response.data.success.message);
           onClose();
         } else {
-          alert("Failed to create a new user, please check your inputs!");
+          alert(response.data.error.message);
         }
-      } catch (error) {
-        alert("Failed to create a new user due to server error!");
+      } catch (error: any) {
+        alert(error.response.data.error.message);
         // Handle errors here
         console.error("Error fetching data:", error);
       }
