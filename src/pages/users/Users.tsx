@@ -92,7 +92,7 @@ const Users = () => {
   }, []);
 
   useEffect(() => {
-    fetchUsers();
+    getUsers();
     const storedUserString = localStorage.getItem("user");
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
@@ -101,11 +101,11 @@ const Users = () => {
   }, []);
 
   useEffect(() => {
-    fetchUsers();
+    getUsers();
   }, [isFormOpen, Status]);
 
   // Fetch device count data
-  const fetchUsers = async () => {
+  const getUsers = async () => {
     const storedUserString = localStorage.getItem("user");
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);

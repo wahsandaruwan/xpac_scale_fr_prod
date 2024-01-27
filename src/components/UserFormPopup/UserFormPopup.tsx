@@ -1,6 +1,6 @@
 // UserFormPopup.tsx
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./userForm.scss"; // Import the SCSS file
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -17,6 +17,7 @@ interface UserFormState {
   password: string;
   phoneNumber: string;
   userType: string;
+  adminChange: boolean;
 }
 
 const UserFormPopup: React.FC<UserFormPopupProps> = ({
@@ -30,10 +31,29 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
     password: "",
     phoneNumber: "",
     userType: "none",
+    adminChange: false,
   });
+
+  const [UserType, SetUserType] = useState("");
 
   const params = useParams();
   console.log(params);
+  console.log(InputData);
+
+  useEffect(() => {
+    if (update) {
+      getUser();
+    }
+  }, [params, isOpen]);
+
+  useEffect(() => {
+    getUser();
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      SetUserType(storedUser.userType);
+    }
+  }, []);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -50,6 +70,8 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
     event.preventDefault();
     if (!update) {
       addUser();
+    } else {
+      updateUser();
     }
   };
 
@@ -83,6 +105,7 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
             password: "",
             phoneNumber: "",
             userType: "none",
+            adminChange: false,
           });
           alert(response.data.success.message);
           onClose();
@@ -97,49 +120,82 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
     }
   };
 
-  // const getUser = async () => {
-  //   const storedUserString = localStorage.getItem("user");
-  //   if (storedUserString) {
-  //     const storedUser = JSON.parse(storedUserString);
-  //     const headers = {
-  //       token: `Bearer ${storedUser.accessToken}`,
-  //     };
-  //     if (
-  //       !InputData.fullName ||
-  //       !InputData.emailAddress ||
-  //       !InputData.password ||
-  //       !InputData.phoneNumber ||
-  //       InputData.userType === "none"
-  //     ) {
-  //       alert("Please provide valid information for all fields.");
-  //       return;
-  //     }
-  //     try {
-  //       const response = await axios.post(
-  //         "http://104.245.34.253:3300/api/users/one/" + params.id,
-  //         InputData,
-  //         { headers }
-  //       );
-  //       if (response.data.status) {
-  //         SetInputData({
-  //           fullName: "",
-  //           emailAddress: "",
-  //           password: "",
-  //           phoneNumber: "",
-  //           userType: "none",
-  //         });
-  //         alert("Successfully created a new user!");
-  //         onClose();
-  //       } else {
-  //         alert("Failed to create a new user, please check your inputs!");
-  //       }
-  //     } catch (error) {
-  //       alert("Failed to create a new user due to server error!");
-  //       // Handle errors here
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   }
-  // };
+  const updateUser = async () => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
+      if (
+        !InputData.fullName ||
+        !InputData.emailAddress ||
+        !InputData.password ||
+        !InputData.phoneNumber ||
+        InputData.userType === "none"
+      ) {
+        alert("Please provide valid information for all fields.");
+        return;
+      }
+      try {
+        const response = await axios.put(
+          "http://104.245.34.253:3300/api/users/update/secure/" + params.id,
+          InputData,
+          { headers }
+        );
+        if (response.data.status) {
+          SetInputData({
+            fullName: "",
+            emailAddress: "",
+            password: "",
+            phoneNumber: "",
+            userType: "none",
+            adminChange: false,
+          });
+          alert(response.data.success.message);
+          onClose();
+        } else {
+          alert(response.data.error.message);
+        }
+      } catch (error: any) {
+        alert(error.response.data.error.message);
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
+    }
+  };
+
+  const getUser = async () => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
+
+      try {
+        const response = await axios.get(
+          "http://104.245.34.253:3300/api/users/one/" + params.id,
+          { headers }
+        );
+        if (response.data.status) {
+          SetInputData({
+            fullName: response.data.user.fullName,
+            emailAddress: response.data.user.emailAddress,
+            password: "",
+            phoneNumber: response.data.user.phoneNumber,
+            userType: response.data.user.userType,
+            adminChange: UserType == "admin",
+          });
+        } else {
+          console.error(response.data.error.message);
+        }
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
+    }
+  };
 
   return (
     <div className={`popup-container ${isOpen ? "open" : "closed"}`}>
@@ -170,7 +226,7 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
             value={InputData.password}
             onChange={handleInputChange}
             className="form-input"
-            placeholder="Password"
+            placeholder={!update ? "Password" : "New or Old Password"}
           />
           <br />
           <input
@@ -182,19 +238,22 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
             placeholder="Phone Number"
           />
           <br />
-          <select
-            name="userType"
-            value={InputData.userType}
-            onChange={handleInputChange}
-            className="form-input"
-          >
-            <option value="none" disabled>
-              User Type
-            </option>
-            <option value="customer">Customer</option>
-            <option value="moderator">Moderator</option>
-            <option value="admin">Admin</option>
-          </select>
+          {UserType == "admin" ? (
+            <select
+              name="userType"
+              value={InputData.userType}
+              onChange={handleInputChange}
+              className="form-input"
+            >
+              <option value="none" disabled>
+                User Type
+              </option>
+              <option value="customer">Customer</option>
+              <option value="moderator">Moderator</option>
+              <option value="admin">Admin</option>
+            </select>
+          ) : null}
+
           <br />
           <button type="submit" className="form-button">
             Save
@@ -208,6 +267,7 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
                 password: "",
                 phoneNumber: "",
                 userType: "none",
+                adminChange: false,
               })
             }
             className="form-button"
