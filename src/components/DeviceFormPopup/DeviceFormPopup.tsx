@@ -38,22 +38,12 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
 
   const params = useParams();
   console.log(params);
-  // console.log(InputData);
 
   useEffect(() => {
     if (update) {
       getDevice();
     }
   }, [params, isOpen]);
-
-  useEffect(() => {
-    getDevice();
-    const storedUserString = localStorage.getItem("user");
-    if (storedUserString) {
-      const storedUser = JSON.parse(storedUserString);
-      SetUserType(storedUser.userType);
-    }
-  }, []);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
