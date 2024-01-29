@@ -36,8 +36,6 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
     timeUpdated: "16:08",
   });
 
-  const [UserType, SetUserType] = useState("");
-
   const params = useParams();
   console.log(params);
   // console.log(InputData);
