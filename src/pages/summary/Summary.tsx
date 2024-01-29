@@ -108,15 +108,17 @@ const Summary = () => {
       <div className="home">
         {DevicesData.length > 0 ? (
           DevicesData[0].deviceData ? (
-            DevicesData.map((item, index) => (
-              <SummaryCard
-                key={Date.now() + index}
-                id={item._id}
-                deviceTitle={item.title}
-                itemCount={Number(item.deviceData.itemCount)}
-                batteryPercentage={Number(item.deviceData.batteryPercentage)}
-              />
-            ))
+            DevicesData.map((item, index) =>
+              item.deviceData ? (
+                <SummaryCard
+                  key={Date.now() + index}
+                  id={item._id}
+                  deviceTitle={item.title}
+                  itemCount={Number(item.deviceData.itemCount)}
+                  batteryPercentage={Number(item.deviceData.batteryPercentage)}
+                />
+              ) : null
+            )
           ) : (
             <p>No Data Available...</p>
           )
