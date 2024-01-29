@@ -94,17 +94,19 @@ const Summary = () => {
         }}
       >
         <h1>Summary</h1>
-        <button
-          onClick={() => downloadExcel(DevicesData)}
-          style={{ marginLeft: "30px" }}
-        >
-          Download Excel
-        </button>
+        {DevicesData[0].deviceData ? (
+          <button
+            onClick={() => downloadExcel(DevicesData)}
+            style={{ marginLeft: "30px" }}
+          >
+            Download Excel
+          </button>
+        ) : null}
       </div>
       <div className="home">
         {DevicesData.length > 0 ? (
-          DevicesData.map((item, index) =>
-            item.deviceData ? (
+          DevicesData[0].deviceData ? (
+            DevicesData.map((item, index) => (
               <SummaryCard
                 key={Date.now() + index}
                 id={item._id}
@@ -112,7 +114,9 @@ const Summary = () => {
                 itemCount={Number(item.deviceData.itemCount)}
                 batteryPercentage={Number(item.deviceData.batteryPercentage)}
               />
-            ) : null
+            ))
+          ) : (
+            <p>No Data Available...</p>
           )
         ) : (
           <p>No Data Available...</p>
