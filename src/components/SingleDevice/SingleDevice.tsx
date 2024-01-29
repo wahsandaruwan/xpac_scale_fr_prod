@@ -16,9 +16,14 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Circle from "../circle/Circle";
+import DeviceFormPopup from "../DeviceFormPopup/DeviceFormPopup";
 
-const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
-  // Users data
+const SingleDevice = () => {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
+  // Device recent data
+  const [DeviceRecentData, SetDeviceRecentData] = useState<any[]>([]);
+
   const [ChartData, SetChartData] = useState([]);
 
   // Chart type
@@ -28,6 +33,20 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
   console.log(params);
 
   let navigate = useNavigate();
+
+  const openForm = () => {
+    setIsFormOpen(true);
+  };
+
+  const closeForm = () => {
+    setIsFormOpen(false);
+  };
+
+  useEffect(() => {
+    if (params.id) {
+      fetchDeviceRecentData();
+    }
+  }, [params.id, isFormOpen]);
 
   useEffect(() => {
     const storedUserString = localStorage.getItem("user");
@@ -59,7 +78,51 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
     fetchChartData();
   }, [ChartType]);
 
-  console.log("first");
+  useEffect(() => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      console.log(storedUser);
+      navigate("/products/" + params.id);
+    } else {
+      navigate("/login");
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchDeviceRecentData();
+
+    const intervalId = setInterval(() => {
+      fetchDeviceRecentData();
+    }, 600000);
+
+    // Clear the interval when the component is unmounted
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Fetch device count data
+  const fetchDeviceRecentData = async () => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
+
+      try {
+        const response = await axios.get(
+          "http://104.245.34.253:3300/api/device/one/" + params.id,
+          { headers }
+        );
+        console.log("first");
+        console.log(response.data.weighingDeviceData);
+        SetDeviceRecentData(response.data.weighingDeviceData);
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
+    }
+  };
 
   // Fetch device count data
   const fetchChartData = async () => {
@@ -134,23 +197,24 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
 
   return (
     <div className="single">
-      {deviceRecentData.length > 0 ? (
+      {DeviceRecentData.length > 0 ? (
         <div className="view">
           <div className="info">
             <div className="topInfo">
               <img src="/scale.svg" alt="" />
-              <h1>{deviceRecentData[0].title}</h1>
+              <h1>{DeviceRecentData[0].title}</h1>
+              <button onClick={openForm}>Edit Information</button>
               <button
                 onClick={() =>
                   downloadExcel({
-                    id: deviceRecentData[0]._id,
-                    title: deviceRecentData[0].title,
-                    itemCount: deviceRecentData[0].deviceData.itemCount,
-                    totalWeight: deviceRecentData[0].deviceData.totalWeight,
+                    id: DeviceRecentData[0]._id,
+                    title: DeviceRecentData[0].title,
+                    itemCount: DeviceRecentData[0].deviceData.itemCount,
+                    totalWeight: DeviceRecentData[0].deviceData.totalWeight,
                     batteryPercentage:
-                      deviceRecentData[0].deviceData.batteryPercentage,
+                      DeviceRecentData[0].deviceData.batteryPercentage,
                     batteryVoltage:
-                      deviceRecentData[0].deviceData.batteryVoltage,
+                      DeviceRecentData[0].deviceData.batteryVoltage,
                   })
                 }
               >
@@ -167,42 +231,42 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
               <div className="details">
                 <div className="item">
                   <span className="itemTitle">ID : </span>
-                  <span className="itemValue">{deviceRecentData[0]._id}</span>
+                  <span className="itemValue">{DeviceRecentData[0]._id}</span>
                 </div>
                 {/* <div className="item">
                 <span className="itemTitle">Assigned Item : </span>
                 <span className="itemValue">
-                  {deviceRecentData[0].assignedItem}
+                  {DeviceRecentData[0].assignedItem}
                 </span>
               </div> */}
                 {/* <div className="item">
                   <span className="itemTitle">User Id : </span>
                   <span className="itemValue">
-                    {deviceRecentData[0].userId}
+                    {DeviceRecentData[0].userId}
                   </span>
                 </div> */}
                 <div className="item">
                   <span className="itemTitle">Created Date : </span>
                   <span className="itemValue">
-                    {separateDateAndTime(deviceRecentData[0].createdAt)?.date}
+                    {separateDateAndTime(DeviceRecentData[0].createdAt)?.date}
                   </span>
                 </div>
                 <div className="item">
                   <span className="itemTitle">Created Time : </span>
                   <span className="itemValue">
-                    {separateDateAndTime(deviceRecentData[0].createdAt)?.time}
+                    {separateDateAndTime(DeviceRecentData[0].createdAt)?.time}
                   </span>
                 </div>
                 <div className="item">
                   <span className="itemTitle">Updated Date : </span>
                   <span className="itemValue">
-                    {separateDateAndTime(deviceRecentData[0].updatedAt)?.date}
+                    {separateDateAndTime(DeviceRecentData[0].updatedAt)?.date}
                   </span>
                 </div>
                 <div className="item">
                   <span className="itemTitle">Updated Time : </span>
                   <span className="itemValue">
-                    {separateDateAndTime(deviceRecentData[0].updatedAt)?.time}
+                    {separateDateAndTime(DeviceRecentData[0].updatedAt)?.time}
                   </span>
                 </div>
               </div>
@@ -216,46 +280,46 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
                 <Circle
                   title="Item Count"
                   value={
-                    deviceRecentData[0].deviceData.itemCount < 10
-                      ? "0" + deviceRecentData[0].deviceData.itemCount
-                      : deviceRecentData[0].deviceData.itemCount
+                    DeviceRecentData[0].deviceData.itemCount < 10
+                      ? "0" + DeviceRecentData[0].deviceData.itemCount
+                      : DeviceRecentData[0].deviceData.itemCount
                   }
-                  unVal={deviceRecentData[0].deviceData.itemCount}
+                  unVal={DeviceRecentData[0].deviceData.itemCount}
                   bgColor="#f78f5e"
                   icon="/items1.svg"
                 />
                 <Circle
                   title="Total Weight"
                   value={
-                    deviceRecentData[0].deviceData.totalWeight < 10
-                      ? "0" + deviceRecentData[0].deviceData.totalWeight + "g"
-                      : deviceRecentData[0].deviceData.totalWeight + "g"
+                    DeviceRecentData[0].deviceData.totalWeight < 10
+                      ? "0" + DeviceRecentData[0].deviceData.totalWeight + "g"
+                      : DeviceRecentData[0].deviceData.totalWeight + "g"
                   }
-                  unVal={deviceRecentData[0].deviceData.totalWeight}
+                  unVal={DeviceRecentData[0].deviceData.totalWeight}
                   bgColor="#f0f75e"
                   icon="/weight1.svg"
                 />
                 <Circle
                   title="Battery Percentage"
                   value={
-                    deviceRecentData[0].deviceData.batteryPercentage < 10
+                    DeviceRecentData[0].deviceData.batteryPercentage < 10
                       ? "0" +
-                        deviceRecentData[0].deviceData.batteryPercentage +
+                        DeviceRecentData[0].deviceData.batteryPercentage +
                         "%"
-                      : deviceRecentData[0].deviceData.batteryPercentage + "%"
+                      : DeviceRecentData[0].deviceData.batteryPercentage + "%"
                   }
-                  unVal={deviceRecentData[0].deviceData.batteryPercentage}
+                  unVal={DeviceRecentData[0].deviceData.batteryPercentage}
                   bgColor="#5e99f7"
                   icon="/battery1.svg"
                 />
                 <Circle
                   title="Battery Voltage"
                   value={
-                    deviceRecentData[0].deviceData.batteryVoltage % 1 === 0
-                      ? deviceRecentData[0].deviceData.batteryVoltage + ".0"
-                      : deviceRecentData[0].deviceData.batteryVoltage.toString()
+                    DeviceRecentData[0].deviceData.batteryVoltage % 1 === 0
+                      ? DeviceRecentData[0].deviceData.batteryVoltage + ".0"
+                      : DeviceRecentData[0].deviceData.batteryVoltage.toString()
                   }
-                  unVal={deviceRecentData[0].deviceData.batteryVoltage}
+                  unVal={DeviceRecentData[0].deviceData.batteryVoltage}
                   bgColor="#b583f2"
                   icon="/voltage1.svg"
                 />
@@ -309,21 +373,7 @@ const SingleDevice = ({ deviceRecentData }: { deviceRecentData: any }) => {
       ) : (
         <p>No Data Available...</p>
       )}
-      {/* <div className="activities">
-        <h2>Latest Activities</h2>
-        {props.activities && (
-          <ul>
-            {props.activities.map((activity) => (
-              <li key={activity.text}>
-                <div>
-                  <p>{activity.text}</p>
-                  <time>{activity.time}</time>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div> */}
+      <DeviceFormPopup isOpen={isFormOpen} update={true} onClose={closeForm} />
     </div>
   );
 };

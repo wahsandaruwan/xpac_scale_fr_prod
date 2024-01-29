@@ -200,7 +200,7 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
   return (
     <div className={`popup-container ${isOpen ? "open" : "closed"}`}>
       <div className="popup-content">
-        <h2 className="heading">{!update ? "Add a User" : "Update User"}</h2>
+        <h2 className="heading">{!update ? "Add a User" : "Update a User"}</h2>
         <form onSubmit={handleSubmit}>
           <input
             type="text"

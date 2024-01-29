@@ -134,7 +134,7 @@ const Products = () => {
       ) : (
         <DataTable slug="products" columns={columns} rows={data} />
       )} */}
-      <DeviceFormPopup isOpen={isFormOpen} onClose={closeForm} />
+      <DeviceFormPopup isOpen={isFormOpen} update={false} onClose={closeForm} />
     </div>
   );
 };
