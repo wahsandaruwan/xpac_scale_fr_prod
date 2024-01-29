@@ -94,13 +94,15 @@ const Summary = () => {
         }}
       >
         <h1>Summary</h1>
-        {DevicesData[0].deviceData ? (
-          <button
-            onClick={() => downloadExcel(DevicesData)}
-            style={{ marginLeft: "30px" }}
-          >
-            Download Excel
-          </button>
+        {DevicesData.length > 0 ? (
+          DevicesData[0].deviceData ? (
+            <button
+              onClick={() => downloadExcel(DevicesData)}
+              style={{ marginLeft: "30px" }}
+            >
+              Download Excel
+            </button>
+          ) : null
         ) : null}
       </div>
       <div className="home">
