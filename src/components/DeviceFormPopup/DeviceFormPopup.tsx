@@ -181,9 +181,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
   return (
     <div className={`popup-container ${isOpen ? "open" : "closed"}`}>
       <div className="popup-content">
-        <h2 className="heading">
-          {!update ? "Add a Device" : "Update a Device"}
-        </h2>
+        <h2 className="heading">{!update ? "Add Device" : "Update Device"}</h2>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
