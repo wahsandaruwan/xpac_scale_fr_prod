@@ -140,6 +140,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
         version="1.1"
         width="180px"
         height="180px"
+        className="c_svg"
       >
         <circle
           cx="90"
