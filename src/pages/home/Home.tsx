@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 interface CountDataType {
   deviceCount: number;
-  itemCount: number;
+  adminCount: number;
   modCount: number;
   customerCount: number;
 }
@@ -153,15 +153,21 @@ const Home = () => {
             <ChartBox
               title="Total Customers"
               count={CountData.customerCount}
-              icon="/customers1.svg"
+              icon="/custuser.svg"
             />
           </div>
-
+          <div className="box box6">
+            <ChartBox
+              title="Total Admins"
+              count={CountData?.adminCount}
+              icon="/adminuser.svg"
+            />
+          </div>
           <div className="box box3">
             <ChartBox
               title="Total Moderators"
               count={CountData.modCount}
-              icon="/admins1.svg"
+              icon="/moduser.svg"
             />
           </div>
           <div className="box box5">
@@ -169,13 +175,6 @@ const Home = () => {
               title="Total Devices"
               count={CountData.deviceCount}
               icon="/devices1.svg"
-            />
-          </div>
-          <div className="box box6">
-            <ChartBox
-              title="Total Items"
-              count={CountData?.itemCount}
-              icon="/itemlist1.svg"
             />
           </div>
         </>

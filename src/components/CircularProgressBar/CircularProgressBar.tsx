@@ -122,7 +122,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
             className="current-value"
             style={{ color: TextColor ? TextColor : "#ffffff" }}
           >
-            {ShowCurrentValue !== null
+            {ShowCurrentValue
               ? ShowCurrentValue % 1 === 0
                 ? ShowCurrentValue.toFixed(0)
                 : ShowCurrentValue.toFixed(2)
