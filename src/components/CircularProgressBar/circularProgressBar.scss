@@ -1,0 +1,75 @@
+.progress-bar {
+  width: 200px;
+  height: 200px;
+  //background-color: dodgerblue;
+  position: relative;
+  animation: zoomAnimation 4s infinite alternate;
+}
+
+.outer {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  padding: 20px;
+  box-shadow: 6px 6px 10px -1px rgba(0, 0, 0, 0.15),
+    -6px -6px 10px -1px rgba(0, 0, 0, 0.15);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+  width: 160px;
+  border-radius: 50%;
+  //box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2), inset -4px -4px 6px -1px rgba(255,255,255,0.7),
+  //          -0.5px -0.5px 0px rgba(255,255,255,1), 0.5px 0.5px 0px rgba(0,0,0,0.15), 0px 12px 10px -10px rgba(0,0,0,0.05);
+}
+
+.current-value {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.title {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 0.8rem;
+}
+
+circle {
+  fill: none;
+  stroke: var(--BarColor);
+  border: var(--BarColor);
+  stroke-width: 20px;
+  stroke-dasharray: 540;
+  stroke-dashoffset: 540;
+  animation: anim 2s linear forwards;
+}
+
+svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.icon {
+  width: 35px;
+  height: 35px;
+}
+
+@keyframes anim {
+  100% {
+    stroke-dashoffset: var(--DashOffSet);
+  }
+}
+
+@keyframes zoomAnimation {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.95);
+  }
+}

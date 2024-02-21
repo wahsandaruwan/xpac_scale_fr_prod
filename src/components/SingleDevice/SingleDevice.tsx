@@ -346,7 +346,6 @@ const SingleDevice = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                   width={500}
-                  height={300}
                   data={ChartData}
                   margin={{
                     top: 5,
@@ -356,7 +355,7 @@ const SingleDevice = () => {
                   }}
                 >
                   <XAxis />
-                  <YAxis />
+                  <YAxis domain={[0, 100]} />
                   <Tooltip />
                   <Legend />
                   <Line type="monotone" dataKey="itemCount" stroke="black" />
