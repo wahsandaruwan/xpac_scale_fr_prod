@@ -1,18 +1,25 @@
+/* --------------Reset style ------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .progress-bar {
-  width: 200px;
-  height: 200px;
-  //background-color: dodgerblue;
-  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 15px;
   animation: zoomAnimation 4s infinite alternate;
 }
 
 .outer {
-  height: 200px;
-  width: 200px;
+  height: 180px;
+  width: 180px;
   border-radius: 50%;
   padding: 20px;
-  box-shadow: 6px 6px 10px -1px rgba(0, 0, 0, 0.15),
-    -6px -6px 10px -1px rgba(0, 0, 0, 0.15);
+  box-shadow: 3px 3px 5px -1px rgba(255, 255, 255, 0.664),
+    -3px -3px 5px -1px rgba(255, 255, 255, 0.664);
 }
 
 .inner {
@@ -20,21 +27,20 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 160px;
-  width: 160px;
+  height: 140px;
+  width: 140px;
   border-radius: 50%;
   //box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2), inset -4px -4px 6px -1px rgba(255,255,255,0.7),
   //          -0.5px -0.5px 0px rgba(255,255,255,1), 0.5px 0.5px 0px rgba(0,0,0,0.15), 0px 12px 10px -10px rgba(0,0,0,0.05);
 }
 
 .current-value {
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 600;
 }
 
 .title {
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin: 3px 0;
   font-size: 0.8rem;
 }
 
@@ -42,9 +48,9 @@ circle {
   fill: none;
   stroke: var(--BarColor);
   border: var(--BarColor);
-  stroke-width: 20px;
-  stroke-dasharray: 540;
-  stroke-dashoffset: 540;
+  stroke-width: 15px;
+  stroke-dasharray: 480;
+  stroke-dashoffset: 480;
   animation: anim 2s linear forwards;
 }
 
@@ -55,8 +61,8 @@ svg {
 }
 
 .icon {
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
 }
 
 @keyframes anim {
@@ -70,6 +76,6 @@ svg {
     transform: scale(1);
   }
   100% {
-    transform: scale(0.95);
+    transform: scale(0.97);
   }
 }

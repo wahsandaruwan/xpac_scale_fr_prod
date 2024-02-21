@@ -1,4 +1,4 @@
-import Circle from "../circle/Circle";
+import CircularProgressBar from "../CircularProgressBar/CircularProgressBar";
 
 const SummaryCard = ({
   id,
@@ -16,7 +16,7 @@ const SummaryCard = ({
     <div
       style={{
         padding: "15px",
-        backgroundColor: "#918f8f",
+        backgroundColor: "#867a7a",
         borderRadius: "10px",
       }}
     >
@@ -35,25 +35,29 @@ const SummaryCard = ({
           alignItems: "center",
         }}
       >
-        <Circle
-          title="Item Count"
-          value={
-            itemCount < 10 ? "0" + itemCount.toString() : itemCount.toString()
-          }
-          unVal={itemCount.toString()}
-          bgColor="#f78f5e"
-          icon="/items1.svg"
+        <CircularProgressBar
+          CurrentValue={parseFloat(itemCount)}
+          StartValue={0}
+          EndValue={100}
+          LowValue={20}
+          HighValue={80}
+          Units={""}
+          InnerColor={"#f78f5e"}
+          TextColor={"#000000"}
+          Icon={"/items1.svg"}
+          Title={"Item Count"}
         />
-        <Circle
-          title="Battery Percentage"
-          value={
-            batteryPercentage < 10
-              ? "0" + batteryPercentage.toString() + "%"
-              : batteryPercentage.toString() + "%"
-          }
-          unVal={batteryPercentage.toString()}
-          bgColor="#5e99f7"
-          icon="/battery1.svg"
+        <CircularProgressBar
+          CurrentValue={parseFloat(batteryPercentage)}
+          StartValue={0}
+          EndValue={100}
+          LowValue={20}
+          HighValue={80}
+          Units={"%"}
+          InnerColor={"#5e99f7"}
+          TextColor={"#000000"}
+          Icon={"/battery1.svg"}
+          Title={"Battery Percentage"}
         />
       </div>
     </div>

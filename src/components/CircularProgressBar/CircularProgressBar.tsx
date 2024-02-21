@@ -26,7 +26,6 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   Icon,
   Title,
 }) => {
-  const [ScaleValue, setScaleValue] = useState(0);
   const [ShowCurrentValue, setCurrentValue] = useState(0);
   const [BarColor, setBarColor] = useState("#e74c3c");
   const [DashOffSet, setDashOffSet] = useState(0);
@@ -35,38 +34,43 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   //const [AnimationTime,setAnimationTime] = useState(30);
 
   useEffect(() => {
-    setCurrentValue(CurrentValue);
-  }, [StartValue]);
+    setCurrentValue(StartValue);
+  }, []);
 
   useEffect(() => {
     CalCulateScal(StartValue, EndValue, CurrentValue);
-  }, [CurrentValue]);
+  }, []);
 
   useEffect(() => {
-    HandelScaleValue(ScaleValue);
-  }, [ScaleValue]);
+    HandelScaleValue(CurrentValue);
+  }, []);
 
   const HandelScaleValue = (value: number) => {
-    if (value === ShowCurrentValue) return; // Exit if the value hasn't changed
+    if (value === ShowCurrentValue) {
+      return;
+    }
     const Steps = Math.abs(value - ShowCurrentValue);
     const Increment = (value - ShowCurrentValue) / Steps;
     const IntervalId: number = setInterval(() => {
       setCurrentValue((prevValue) => {
-        const NewValue = Math.floor(prevValue + Increment + StartValue);
-        UpdateBarColor(NewValue);
-        return NewValue >= value ? value : NewValue;
+        const NewValue = prevValue + Increment;
+        console.log(NewValue);
+        if (Math.abs(NewValue - value) <= Math.abs(Increment)) {
+          clearInterval(IntervalId);
+          return value;
+        }
+        return NewValue;
       });
-      if (ShowCurrentValue >= value) {
-        clearInterval(IntervalId);
-      }
     }, IntervalTime);
+
+    return () => clearInterval(IntervalId);
   };
 
-  useEffect(() => {
-    const percentage = ScaleValue / 100;
-    const DashOffCal = Math.floor(472 - 472 * percentage);
+  const CalDashOffValue = (scalevalue: number) => {
+    const percentage = scalevalue / 100;
+    const DashOffCal = Math.floor(480 - 480 * percentage);
     setDashOffSet(DashOffCal);
-  }, [ScaleValue]);
+  };
 
   const UpdateBarColor = (value: number) => {
     let color: string;
@@ -95,10 +99,10 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   const CalCulateScal = (Start: number, End: number, value: number) => {
     const Range = 100 / (End - Start);
     const div = (value - Start) * Range;
-
-    setScaleValue(div);
+    UpdateBarColor(div);
+    CalDashOffValue(div);
   };
-  console.log(ShowCurrentValue);
+  //console.log(ShowCurrentValue);
   //console.log(BarColor);
   //console.log(DashOffSet);
 
@@ -109,9 +113,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
           className="inner"
           style={{ backgroundColor: InnerColor, border: InnerColor }}
         >
-          <div>
-            {Icon ? <img alt="icon_stat" src={Icon} className="icon" /> : " "}
-          </div>
+          <div>{Icon ? <img src={Icon} className="icon" /> : " "}</div>
           <div
             className="title"
             style={{ color: TextColor ? TextColor : "#ffffff" }}
@@ -123,26 +125,28 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
             style={{ color: TextColor ? TextColor : "#ffffff" }}
           >
             {ShowCurrentValue
-              ? ShowCurrentValue % 1 === 0
-                ? ShowCurrentValue.toFixed(0)
-                : ShowCurrentValue.toFixed(2)
+              ? ShowCurrentValue - Math.floor(ShowCurrentValue) === 0
+                ? parseInt(ShowCurrentValue.toFixed(0)) < 10
+                  ? "0" + ShowCurrentValue.toFixed(0)
+                  : ShowCurrentValue.toFixed(0)
+                : ShowCurrentValue.toFixed(1)
               : "0"}
-            {Units ? Units : "?"}
+            {Units ? Units : null}
           </div>
         </div>
       </div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
-        width="200px"
-        height="200px"
+        width="180px"
+        height="180px"
       >
         <circle
-          cx="100"
-          cy="100"
-          r="90"
+          cx="90"
+          cy="90"
+          r="80"
           strokeLinecap="round"
-          strokeDasharray="472"
+          strokeDasharray="480"
           style={
             {
               "--BarColor": BarColor,

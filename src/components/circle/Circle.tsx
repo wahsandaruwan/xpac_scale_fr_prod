@@ -17,11 +17,11 @@ const Circle = ({
     <div
       className="zooming-circle"
       style={{
-        width: "165px",
-        height: "165px",
+        width: "180px",
+        height: "180px",
         borderRadius: "50%",
         backgroundColor: bgColor,
-        margin: "10px",
+        margin: "15px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

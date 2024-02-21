@@ -17,6 +17,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Circle from "../circle/Circle";
 import DeviceFormPopup from "../DeviceFormPopup/DeviceFormPopup";
+import CircularProgressBar from "../CircularProgressBar/CircularProgressBar";
 
 const SingleDevice = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -277,16 +278,47 @@ const SingleDevice = () => {
                   alignItems: "flex-start",
                 }}
               >
-                <Circle
-                  title="Item Count"
-                  value={
-                    DeviceRecentData[0].deviceData.itemCount < 10
-                      ? "0" + DeviceRecentData[0].deviceData.itemCount
-                      : DeviceRecentData[0].deviceData.itemCount
-                  }
-                  unVal={DeviceRecentData[0].deviceData.itemCount}
-                  bgColor="#f78f5e"
-                  icon="/items1.svg"
+                <CircularProgressBar
+                  CurrentValue={parseFloat(
+                    DeviceRecentData[0].deviceData.itemCount
+                  )}
+                  StartValue={0}
+                  EndValue={100}
+                  LowValue={20}
+                  HighValue={80}
+                  Units={""}
+                  InnerColor={"#f78f5e"}
+                  TextColor={"#000000"}
+                  Icon={"/items1.svg"}
+                  Title={"Item Count"}
+                />
+                <CircularProgressBar
+                  CurrentValue={parseFloat(
+                    DeviceRecentData[0].deviceData.batteryPercentage
+                  )}
+                  StartValue={0}
+                  EndValue={100}
+                  LowValue={20}
+                  HighValue={80}
+                  Units={"%"}
+                  InnerColor={"#5e99f7"}
+                  TextColor={"#000000"}
+                  Icon={"/battery1.svg"}
+                  Title={"Battery Percentage"}
+                />
+                <CircularProgressBar
+                  CurrentValue={parseFloat(
+                    DeviceRecentData[0].deviceData.batteryVoltage
+                  )}
+                  StartValue={0}
+                  EndValue={4.5}
+                  LowValue={20}
+                  HighValue={80}
+                  Units={"V"}
+                  InnerColor={"#b583f2"}
+                  TextColor={"#000000"}
+                  Icon={"/voltage1.svg"}
+                  Title={"Battery Voltage"}
                 />
                 <Circle
                   title="Total Weight"
@@ -298,30 +330,6 @@ const SingleDevice = () => {
                   unVal={DeviceRecentData[0].deviceData.totalWeight}
                   bgColor="#f0f75e"
                   icon="/weight1.svg"
-                />
-                <Circle
-                  title="Battery Percentage"
-                  value={
-                    DeviceRecentData[0].deviceData.batteryPercentage < 10
-                      ? "0" +
-                        DeviceRecentData[0].deviceData.batteryPercentage +
-                        "%"
-                      : DeviceRecentData[0].deviceData.batteryPercentage + "%"
-                  }
-                  unVal={DeviceRecentData[0].deviceData.batteryPercentage}
-                  bgColor="#5e99f7"
-                  icon="/battery1.svg"
-                />
-                <Circle
-                  title="Battery Voltage"
-                  value={
-                    DeviceRecentData[0].deviceData.batteryVoltage % 1 === 0
-                      ? DeviceRecentData[0].deviceData.batteryVoltage + ".0"
-                      : DeviceRecentData[0].deviceData.batteryVoltage.toString()
-                  }
-                  unVal={DeviceRecentData[0].deviceData.batteryVoltage}
-                  bgColor="#b583f2"
-                  icon="/voltage1.svg"
                 />
               </div>
             </div>
