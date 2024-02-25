@@ -46,6 +46,8 @@ const Products = () => {
   // Status
   const [Status, SetStatus] = useState("none");
 
+  console.log(Status);
+
   let navigate = useNavigate();
 
   const openForm = () => {
@@ -63,11 +65,7 @@ const Products = () => {
       const storedUser = JSON.parse(storedUserString);
       console.log(storedUser);
       SetUserType(storedUser.userType);
-      if (storedUser.userType != "customer") {
-        navigate("/products");
-      } else {
-        navigate("/summary");
-      }
+      navigate("/products");
     } else {
       navigate("/login");
     }
@@ -75,7 +73,7 @@ const Products = () => {
 
   useEffect(() => {
     fetchDevices();
-  }, [isFormOpen, Status]);
+  }, [isFormOpen]);
 
   // Fetch devices
   const fetchDevices = async () => {
@@ -114,6 +112,7 @@ const Products = () => {
   };
 
   const updateStatus = (val: string) => {
+    fetchDevices();
     SetStatus(val);
   };
 

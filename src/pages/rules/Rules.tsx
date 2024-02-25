@@ -57,6 +57,7 @@ const Rules = () => {
 
   // Status
   const [Status, SetStatus] = useState("none");
+  console.log(Status);
 
   let navigate = useNavigate();
 
@@ -91,7 +92,7 @@ const Rules = () => {
 
   useEffect(() => {
     fetchRules();
-  }, [isFormOpen, Status]);
+  }, [isFormOpen]);
 
   // Fetch devices
   const fetchRules = async () => {
@@ -117,6 +118,7 @@ const Rules = () => {
   };
 
   const updateStatus = (val: string) => {
+    fetchRules();
     SetStatus(val);
   };
 

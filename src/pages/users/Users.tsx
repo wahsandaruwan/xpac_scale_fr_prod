@@ -70,6 +70,8 @@ const Users = () => {
   // Status
   const [Status, SetStatus] = useState("none");
 
+  console.log(Status);
+
   let navigate = useNavigate();
 
   const openForm = () => {
@@ -102,7 +104,7 @@ const Users = () => {
 
   useEffect(() => {
     getUsers();
-  }, [isFormOpen, Status]);
+  }, [isFormOpen]);
 
   // Fetch device count data
   const getUsers = async () => {
@@ -128,6 +130,7 @@ const Users = () => {
   };
 
   const updateStatus = (val: string) => {
+    getUsers();
     SetStatus(val);
   };
 
