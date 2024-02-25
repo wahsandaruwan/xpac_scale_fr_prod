@@ -43,12 +43,24 @@ const Summary = () => {
       };
 
       try {
-        const response = await axios.get(
-          "http://104.245.34.253:3300/api/device/all",
-          { headers }
-        );
-        console.log(response.data.devices);
-        SetDevicesData(response.data.devices);
+        if (
+          storedUser.userType == "admin" ||
+          storedUser.userType == "moderator"
+        ) {
+          const response = await axios.get(
+            "http://104.245.34.253:3300/api/device/all",
+            { headers }
+          );
+          console.log(response.data.devices);
+          SetDevicesData(response.data.devices);
+        } else {
+          const response = await axios.get(
+            `http://104.245.34.253:3300/api/device/user/all`,
+            { headers }
+          );
+          console.log(response.data.devices);
+          SetDevicesData(response.data.devices);
+        }
       } catch (error) {
         // Handle errors here
         console.error("Error fetching data:", error);
@@ -94,15 +106,13 @@ const Summary = () => {
         }}
       >
         <h1>Summary</h1>
-        {DevicesData.length > 0 ? (
-          DevicesData[0].deviceData ? (
-            <button
-              onClick={() => downloadExcel(DevicesData)}
-              style={{ marginLeft: "30px" }}
-            >
-              Download Excel
-            </button>
-          ) : null
+        {DevicesData.some((item) => item.deviceData) ? (
+          <button
+            onClick={() => downloadExcel(DevicesData)}
+            style={{ marginLeft: "30px" }}
+          >
+            Download Excel
+          </button>
         ) : null}
       </div>
       <div className="home">

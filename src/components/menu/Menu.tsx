@@ -14,31 +14,60 @@ const Menu = () => {
     }
   }, []);
 
-  return UserType != "customer" ? (
-    <div className="menu">
-      {menu.map((item) => (
-        <div className="item" key={item.id}>
-          <span className="title">{item.title}</span>
-          {item.listItems.map((listItem) => (
-            <Link to={listItem.url} className="listItem" key={listItem.id}>
-              <img src={listItem.icon} alt="" style={{ width: "20px" }} />
-              <span className="listItemTitle">{listItem.title}</span>
-            </Link>
-          ))}
-        </div>
-      ))}
-    </div>
-  ) : (
+  // return UserType != "customer" ? (
+  //   <div className="menu">
+  //     {menu.map((item) => (
+  //       <div className="item" key={item.id}>
+  //         <span className="title">{item.title}</span>
+  //         {item.listItems.map((listItem) => (
+  //           <Link to={listItem.url} className="listItem" key={listItem.id}>
+  //             <img src={listItem.icon} alt="" style={{ width: "20px" }} />
+  //             <span className="listItemTitle">{listItem.title}</span>
+  //           </Link>
+  //         ))}
+  //       </div>
+  //     ))}
+  //   </div>
+  // ) : (
+  //   <div className="menu">
+  //     {menu.map((item) => (
+  //       <div className="item" key={item.id}>
+  //         <span className="title">{item.title}</span>
+  //         {item.listItems.map((listItem) =>
+  //           listItem.title == "Devices" ||
+  //           listItem.title == "Profile" ||
+  //           listItem.title == "Summary" ? (
+  //             <Link to={listItem.url} className="listItem" key={listItem.id}>
+  //               <img src={listItem.icon} alt="" style={{ width: "20px" }} />
+  //               <span className="listItemTitle">{listItem.title}</span>
+  //             </Link>
+  //           ) : null
+  //         )}
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
+
+  return (
     <div className="menu">
       {menu.map((item) => (
         <div className="item" key={item.id}>
           <span className="title">{item.title}</span>
           {item.listItems.map((listItem) =>
-            listItem.title == "Devices" ? (
-              <Link to={listItem.url} className="listItem" key={listItem.id}>
-                <img src={listItem.icon} alt="" style={{ width: "20px" }} />
-                <span className="listItemTitle">{listItem.title}</span>
-              </Link>
+            UserType ? (
+              UserType != "customer" ? (
+                <Link to={listItem.url} className="listItem" key={listItem.id}>
+                  <img src={listItem.icon} alt="" style={{ width: "20px" }} />
+                  <span className="listItemTitle">{listItem.title}</span>
+                </Link>
+              ) : listItem.title == "Devices" ||
+                listItem.title == "Summary" ||
+                listItem.title == "Profile" ? (
+                <Link to={listItem.url} className="listItem" key={listItem.id}>
+                  <img src={listItem.icon} alt="" style={{ width: "20px" }} />
+                  <span className="listItemTitle">{listItem.title}</span>
+                </Link>
+              ) : null
             ) : null
           )}
         </div>

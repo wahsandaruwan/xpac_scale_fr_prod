@@ -27,6 +27,8 @@ const SingleDevice = () => {
 
   const [ChartData, SetChartData] = useState([]);
 
+  const [UserType, SetUserType] = useState("");
+
   // Chart type
   const [ChartType, SetChartType] = useState("monthly");
 
@@ -84,6 +86,7 @@ const SingleDevice = () => {
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
       console.log(storedUser);
+      SetUserType(storedUser.userType);
       navigate("/products/" + params.id);
     } else {
       navigate("/login");
@@ -204,7 +207,9 @@ const SingleDevice = () => {
             <div className="topInfo">
               <img src="/scale.svg" alt="" />
               <h1>{DeviceRecentData[0].title}</h1>
-              <button onClick={openForm}>Edit Information</button>
+              {UserType == "admin" ? (
+                <button onClick={openForm}>Edit Information</button>
+              ) : null}
               <button
                 onClick={() =>
                   downloadExcel({

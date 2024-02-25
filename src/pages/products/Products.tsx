@@ -57,23 +57,19 @@ const Products = () => {
   };
 
   useEffect(() => {
+    fetchDevices();
     const storedUserString = localStorage.getItem("user");
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
       console.log(storedUser);
-      navigate("/products");
+      SetUserType(storedUser.userType);
+      if (storedUser.userType != "customer") {
+        navigate("/products");
+      } else {
+        navigate("/summary");
+      }
     } else {
       navigate("/login");
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchDevices();
-
-    const storedUserString = localStorage.getItem("user");
-    if (storedUserString) {
-      const storedUser = JSON.parse(storedUserString);
-      SetUserType(storedUser.userType);
     }
   }, []);
 
@@ -91,12 +87,25 @@ const Products = () => {
       };
 
       try {
-        const response = await axios.get(
-          "http://104.245.34.253:3300/api/device/all",
-          { headers }
-        );
-        console.log(response.data.devices);
-        SetDevicesData(response.data.devices);
+        if (
+          storedUser.userType == "admin" ||
+          storedUser.userType == "moderator"
+        ) {
+          const response = await axios.get(
+            "http://104.245.34.253:3300/api/device/all",
+            { headers }
+          );
+          console.log(response.data.devices);
+          SetDevicesData(response.data.devices);
+        } else {
+          console.log(UserType);
+          const response = await axios.get(
+            `http://104.245.34.253:3300/api/device/user/all`,
+            { headers }
+          );
+          console.log(response.data.devices);
+          SetDevicesData(response.data.devices);
+        }
       } catch (error) {
         // Handle errors here
         console.error("Error fetching data:", error);

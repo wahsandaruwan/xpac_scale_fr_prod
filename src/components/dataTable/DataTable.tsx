@@ -2,6 +2,7 @@ import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import "./dataTable.scss";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useState, useEffect } from "react";
 // import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type Props = {
@@ -12,6 +13,15 @@ type Props = {
 };
 
 const DataTable = (props: Props) => {
+  const [UserType, SetUserType] = useState("");
+
+  useEffect(() => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      SetUserType(storedUser.userType);
+    }
+  }, []);
   // TEST THE API
 
   // const queryClient = useQueryClient();
@@ -119,9 +129,14 @@ const DataTable = (props: Props) => {
           <Link to={`/${props.slug}/${params.row._id}`}>
             <img src="/vieweye.svg" alt="" />
           </Link>
-          <div className="delete" onClick={() => handleDelete(params.row._id)}>
-            <img src="/delete.svg" alt="" />
-          </div>
+          {UserType == "admin" ? (
+            <div
+              className="delete"
+              onClick={() => handleDelete(params.row._id)}
+            >
+              <img src="/delete.svg" alt="" />
+            </div>
+          ) : null}
         </div>
       );
     },
