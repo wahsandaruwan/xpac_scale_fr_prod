@@ -215,6 +215,7 @@ const SingleDevice = () => {
                   downloadExcel({
                     id: DeviceRecentData[0]._id,
                     title: DeviceRecentData[0].title,
+                    assignedProduct: DeviceRecentData[0].assignedProduct,
                     itemCount: DeviceRecentData[0].deviceData.itemCount,
                     totalWeight: DeviceRecentData[0].deviceData.totalWeight,
                     batteryPercentage:
@@ -238,6 +239,12 @@ const SingleDevice = () => {
                 <div className="item">
                   <span className="itemTitle">ID : </span>
                   <span className="itemValue">{DeviceRecentData[0]._id}</span>
+                </div>
+                <div className="item">
+                  <span className="itemTitle">Assigned Product : </span>
+                  <span className="itemValue">
+                    {DeviceRecentData[0].assignedProduct}
+                  </span>
                 </div>
                 {/* <div className="item">
                 <span className="itemTitle">Assigned Item : </span>

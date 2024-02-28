@@ -13,6 +13,7 @@ interface DeviceFormPopupProps {
 
 interface DeviceFormState {
   title: string;
+  assignedProduct: string;
   imageUrl: string;
   assignedItem: string;
   dateCreated: string;
@@ -28,6 +29,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
 }) => {
   const [InputData, SetInputData] = useState<DeviceFormState>({
     title: "",
+    assignedProduct: "",
     imageUrl: "1",
     assignedItem: "659e479f798894bd3bea1fe7",
     dateCreated: "2023-01-22",
@@ -72,7 +74,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
       const headers = {
         token: `Bearer ${storedUser.accessToken}`,
       };
-      if (!InputData.title) {
+      if (!InputData.title || !InputData.assignedProduct) {
         alert("Please provide valid information for all fields.");
         return;
       }
@@ -85,6 +87,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
         if (response.data.status) {
           SetInputData({
             title: "",
+            assignedProduct: "",
             imageUrl: "1",
             assignedItem: "659e479f798894bd3bea1fe7",
             dateCreated: "2023-01-22",
@@ -111,19 +114,23 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
       const headers = {
         token: `Bearer ${storedUser.accessToken}`,
       };
-      if (!InputData.title) {
+      if (!InputData.title || !InputData.assignedProduct) {
         alert("Please provide valid information for all fields.");
         return;
       }
       try {
         const response = await axios.put(
           "http://104.245.34.253:3300/api/device/update-device/" + params.id,
-          { title: InputData.title },
+          {
+            title: InputData.title,
+            assignedProduct: InputData.assignedProduct,
+          },
           { headers }
         );
         if (response.data.status) {
           SetInputData({
             title: "",
+            assignedProduct: "",
             imageUrl: "1",
             assignedItem: "659e479f798894bd3bea1fe7",
             dateCreated: "2023-01-22",
@@ -161,6 +168,8 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
           console.log(response.data.weighingDeviceData[0].title);
           SetInputData({
             title: response.data.weighingDeviceData[0].title,
+            assignedProduct:
+              response.data.weighingDeviceData[0].assignedProduct,
             imageUrl: "1",
             assignedItem: "659e479f798894bd3bea1fe7",
             dateCreated: "2023-01-22",
@@ -191,6 +200,14 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
             className="form-input"
             placeholder="Device Title"
           />
+          <input
+            type="text"
+            name="assignedProduct"
+            value={InputData.assignedProduct}
+            onChange={handleInputChange}
+            className="form-input"
+            placeholder="Assigned Product"
+          />
 
           <button type="submit" className="form-button">
             Save
@@ -200,6 +217,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
             onClick={() => {
               SetInputData({
                 title: "",
+                assignedProduct: "",
                 imageUrl: "1",
                 assignedItem: "659e479f798894bd3bea1fe7",
                 dateCreated: "2023-01-22",

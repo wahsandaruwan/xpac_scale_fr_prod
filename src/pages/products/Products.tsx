@@ -23,6 +23,12 @@ const columns: GridColDef[] = [
     flex: 1,
   },
   {
+    field: "assignedProduct",
+    type: "string",
+    headerName: "Product",
+    flex: 1,
+  },
+  {
     field: "createdAt",
     headerName: "Created At",
     flex: 1,
