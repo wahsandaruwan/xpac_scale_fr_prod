@@ -216,7 +216,7 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
   return (
     <div className={`popup-container ${isOpen ? "open" : "closed"}`}>
       <div className="popup-content">
-        <h2 className="heading">Add a Rule</h2>
+        <h2 className="heading">{!update ? "Add Rule" : "Update Rule"}</h2>
         <form onSubmit={handleSubmit}>
           <select
             name="userId"
