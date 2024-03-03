@@ -1,4 +1,5 @@
 import UserFormPopup from "../UserFormPopup/UserFormPopup";
+import ImagePopup from "../ImagePopup/ImagePopup";
 import "./single.scss";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -9,6 +10,7 @@ const Single = () => {
   const [UserData, SetUserData] = useState<any>({});
 
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isImgPopupOpen, setIsImgPopupOpen] = useState(false);
 
   const [UserId, SetUserId] = useState("");
 
@@ -22,6 +24,14 @@ const Single = () => {
 
   const closeForm = () => {
     setIsFormOpen(false);
+  };
+
+  const openImgPopup = () => {
+    setIsImgPopupOpen(true);
+  };
+
+  const closeImgPopup = () => {
+    setIsImgPopupOpen(false);
   };
 
   useEffect(() => {
@@ -84,7 +94,16 @@ const Single = () => {
         <div className="view">
           <div className="info">
             <div className="topInfo">
-              <img src="/noavatar.png" alt="" />
+              <img
+                style={{ cursor: "pointer" }}
+                src={
+                  UserData.imageUrl
+                    ? `http://104.245.34.253:3300/uploads/${UserData.imageUrl}`
+                    : `/noavatar.png`
+                }
+                alt="Profile Picture"
+                onClick={openImgPopup}
+              />
               <h1>{UserData.fullName}</h1>
               <button onClick={openForm}>Edit Information</button>
             </div>
@@ -137,6 +156,15 @@ const Single = () => {
         <p>No Data Available...</p>
       )}
       <UserFormPopup isOpen={isFormOpen} update={true} onClose={closeForm} />
+      <ImagePopup
+        isOpen={isImgPopupOpen}
+        onClose={closeImgPopup}
+        imageSrc={
+          UserData.imageUrl
+            ? `http://104.245.34.253:3300/uploads/${UserData.imageUrl}`
+            : `/noavatar.png`
+        }
+      />
     </div>
   );
 };

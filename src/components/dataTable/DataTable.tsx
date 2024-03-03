@@ -3,6 +3,7 @@ import "./dataTable.scss";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import RuleFormPopup from "../../components/RuleFormPopup/RuleFormPopup";
 // import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type Props = {
@@ -14,6 +15,16 @@ type Props = {
 
 const DataTable = (props: Props) => {
   const [UserType, SetUserType] = useState("");
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [RuleId, SetRuleId] = useState("");
+
+  const openForm = () => {
+    setIsFormOpen(true);
+  };
+
+  const closeForm = () => {
+    setIsFormOpen(false);
+  };
 
   useEffect(() => {
     const storedUserString = localStorage.getItem("user");
@@ -22,7 +33,16 @@ const DataTable = (props: Props) => {
       SetUserType(storedUser.userType);
     }
   }, []);
+
+  useEffect(() => {
+    props.statusChange("update");
+  }, [isFormOpen]);
   // TEST THE API
+
+  const openRulePopup = (id: string) => {
+    SetRuleId(id);
+    openForm();
+  };
 
   // const queryClient = useQueryClient();
   // // const mutation = useMutation({
@@ -36,10 +56,16 @@ const DataTable = (props: Props) => {
   // //   }
   // // });
 
-  const handleDelete = async (id: any) => {
+  const handleDelete = async (id: any, imageUrl: any) => {
     const userConfirmed = window.confirm("Do you want to proceed?");
 
     if (userConfirmed) {
+      if (imageUrl) {
+        await axios.delete(
+          "http://104.245.34.253:3300/api/files/delete/" + imageUrl
+        );
+      }
+
       if (props.slug == "rules") {
         const storedUserString = localStorage.getItem("user");
         if (storedUserString) {
@@ -126,13 +152,24 @@ const DataTable = (props: Props) => {
     renderCell: (params) => {
       return (
         <div className="action">
-          <Link to={`/${props.slug}/${params.row._id}`}>
-            <img src="/vieweye.svg" alt="" />
-          </Link>
+          {props.slug != "rules" ? (
+            <Link to={`/${props.slug}/${params.row._id}`}>
+              <img src="/vieweye.svg" alt="" />
+            </Link>
+          ) : (
+            <div className="edit" onClick={() => openRulePopup(params.row._id)}>
+              <img src="/edit.svg" alt="" />
+            </div>
+          )}
           {UserType == "admin" ? (
             <div
               className="delete"
-              onClick={() => handleDelete(params.row._id)}
+              onClick={() =>
+                handleDelete(
+                  params.row._id,
+                  params.row.imageUrl ? params.row.imageUrl : ""
+                )
+              }
             >
               <img src="/delete.svg" alt="" />
             </div>
@@ -175,6 +212,12 @@ const DataTable = (props: Props) => {
         disableRowSelectionOnClick
         disableDensitySelector
         style={{ minHeight: "500px" }}
+      />
+      <RuleFormPopup
+        isOpen={isFormOpen}
+        onClose={closeForm}
+        update={true}
+        ruleId={RuleId}
       />
     </div>
   );

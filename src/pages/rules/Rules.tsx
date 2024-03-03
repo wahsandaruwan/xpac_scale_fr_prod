@@ -118,6 +118,7 @@ const Rules = () => {
   };
 
   const updateStatus = (val: string) => {
+    console.log("sfsfaafagsgsg");
     fetchRules();
     SetStatus(val);
   };
@@ -148,7 +149,12 @@ const Rules = () => {
       ) : (
         <DataTable slug="products" columns={columns} rows={data} />
       )} */}
-      <RuleFormPopup isOpen={isFormOpen} onClose={closeForm} />
+      <RuleFormPopup
+        isOpen={isFormOpen}
+        onClose={closeForm}
+        update={false}
+        ruleId=""
+      />
     </div>
   );
 };

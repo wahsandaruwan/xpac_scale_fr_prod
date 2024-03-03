@@ -1,6 +1,6 @@
 // UserFormPopup.tsx
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./userForm.scss"; // Import the SCSS file
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -16,6 +16,7 @@ interface UserFormState {
   emailAddress: string;
   password: string;
   phoneNumber: string;
+  imageUrl: string;
   userType: string;
   adminChange: boolean;
 }
@@ -30,15 +31,22 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
     emailAddress: "",
     password: "",
     phoneNumber: "",
+    imageUrl: "",
     userType: "none",
     adminChange: false,
   });
 
+  console.log(InputData);
+
   const [UserType, SetUserType] = useState("");
+
+  const [ImageName, SetImageName] = useState<File | null | "">("");
+  const [ExistingImage, SetExistingImage] = useState("");
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const params = useParams();
   console.log(params);
-  console.log(InputData);
 
   useEffect(() => {
     if (update) {
@@ -66,36 +74,85 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
     });
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!update) {
-      addUser();
-    } else {
-      updateUser();
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
-  const addUser = async () => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      SetImageName(event.target.files[0]);
+    } else {
+      SetImageName(null);
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+
+    if (
+      !InputData.fullName ||
+      !InputData.emailAddress ||
+      !InputData.password ||
+      !InputData.phoneNumber ||
+      InputData.userType === "none"
+    ) {
+      alert("Please provide valid information for all fields.");
+      return;
+    } else {
+      if (ImageName) {
+        if (ExistingImage) {
+          deleteImage(ExistingImage);
+        }
+
+        formData.append("file", ImageName);
+
+        try {
+          const uploadedImageUrl = await uploadImage(formData);
+          console.log("Uploaded image URL:", uploadedImageUrl);
+          if (uploadedImageUrl) {
+            if (!update) {
+              addUser(uploadedImageUrl);
+            } else {
+              updateUser(uploadedImageUrl);
+            }
+          } else {
+            alert("Something went wrong!");
+          }
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          alert("Something went wrong while uploading the image!");
+        }
+      } else if (!update) {
+        addUser("");
+      } else {
+        updateUser(ExistingImage);
+      }
+    }
+  };
+
+  const addUser = async (uploadedImageUrl: string) => {
     const storedUserString = localStorage.getItem("user");
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
       const headers = {
         token: `Bearer ${storedUser.accessToken}`,
       };
-      if (
-        !InputData.fullName ||
-        !InputData.emailAddress ||
-        !InputData.password ||
-        !InputData.phoneNumber ||
-        InputData.userType === "none"
-      ) {
-        alert("Please provide valid information for all fields.");
-        return;
-      }
+
       try {
         const response = await axios.post(
           "http://104.245.34.253:3300/api/users/register",
-          InputData,
+          {
+            fullName: InputData.fullName,
+            emailAddress: InputData.emailAddress,
+            password: InputData.password,
+            phoneNumber: InputData.phoneNumber,
+            imageUrl: uploadedImageUrl,
+            userType: InputData.userType,
+          },
           { headers }
         );
         if (response.data.status) {
@@ -104,6 +161,7 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
             emailAddress: "",
             password: "",
             phoneNumber: "",
+            imageUrl: "",
             userType: "none",
             adminChange: false,
           });
@@ -120,35 +178,36 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
     }
   };
 
-  const updateUser = async () => {
+  const updateUser = async (uploadedImageUrl: string) => {
     const storedUserString = localStorage.getItem("user");
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
       const headers = {
         token: `Bearer ${storedUser.accessToken}`,
       };
-      if (
-        !InputData.fullName ||
-        !InputData.emailAddress ||
-        !InputData.password ||
-        !InputData.phoneNumber ||
-        InputData.userType === "none"
-      ) {
-        alert("Please provide valid information for all fields.");
-        return;
-      }
+
       try {
         const response = await axios.put(
           "http://104.245.34.253:3300/api/users/update/secure/" + params.id,
-          InputData,
+          {
+            fullName: InputData.fullName,
+            emailAddress: InputData.emailAddress,
+            password: InputData.password,
+            phoneNumber: InputData.phoneNumber,
+            imageUrl: uploadedImageUrl,
+            userType: InputData.userType,
+            adminChange: UserType == "admin",
+          },
           { headers }
         );
         if (response.data.status) {
+          console.log(response.data);
           SetInputData({
             fullName: "",
             emailAddress: "",
             password: "",
             phoneNumber: "",
+            imageUrl: "",
             userType: "none",
             adminChange: false,
           });
@@ -184,9 +243,12 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
             emailAddress: response.data.user.emailAddress,
             password: "",
             phoneNumber: response.data.user.phoneNumber,
+            imageUrl: response.data.user.imageUrl,
             userType: response.data.user.userType,
             adminChange: UserType == "admin",
           });
+
+          SetExistingImage(response.data.user.imageUrl);
         } else {
           console.error(response.data.error.message);
         }
@@ -194,6 +256,49 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
         // Handle errors here
         console.error("Error fetching data:", error);
       }
+    }
+  };
+
+  const uploadImage = async (formData: any) => {
+    try {
+      // Send formData to backend using axios or any other HTTP client
+      const response = await axios.post(
+        "http://104.245.34.253:3300/api/files/save",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.data.status) {
+        const imageUrl = response.data.fileName;
+        return imageUrl;
+      } else {
+        return undefined;
+      }
+      // Handle response from the server
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
+  const deleteImage = async (imageUrl: any) => {
+    try {
+      // Send formData to backend using axios or any other HTTP client
+      const response = await axios.delete(
+        "http://104.245.34.253:3300/api/files/delete/" + imageUrl
+      );
+
+      if (response.data.status) {
+        return true;
+      } else {
+        return false;
+      }
+      // Handle response from the server
+    } catch (error) {
+      console.error("Error uploading image:", error);
     }
   };
 
@@ -255,21 +360,52 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
           ) : null}
 
           <br />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              marginTop: "10px",
+            }}
+          >
+            <button
+              style={{ padding: "5px" }}
+              type="button"
+              onClick={handleButtonClick}
+            >
+              Upload Image
+            </button>
+            <p style={{ fontSize: "0.8rem", marginLeft: "10px" }}>
+              {ImageName ? ImageName.name : "Not selected any image!"}
+            </p>
+          </div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept=".jpg, .jpeg, .png"
+            onChange={handleFileChange}
+            className="form-input"
+            style={{ display: "none" }}
+            placeholder="Profile Image"
+          />
+          <br />
           <button type="submit" className="form-button">
             Save
           </button>
           <button
             type="button"
-            onClick={() =>
+            onClick={() => {
               SetInputData({
                 fullName: "",
                 emailAddress: "",
                 password: "",
                 phoneNumber: "",
+                imageUrl: "",
                 userType: "none",
                 adminChange: false,
-              })
-            }
+              });
+              SetImageName(null);
+            }}
             className="form-button"
           >
             Clear

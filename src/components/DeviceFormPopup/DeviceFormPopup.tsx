@@ -1,6 +1,6 @@
 // UserFormPopup.tsx
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./deviceForm.scss"; // Import the SCSS file
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -30,13 +30,18 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
   const [InputData, SetInputData] = useState<DeviceFormState>({
     title: "",
     assignedProduct: "",
-    imageUrl: "1",
+    imageUrl: "",
     assignedItem: "659e479f798894bd3bea1fe7",
     dateCreated: "2023-01-22",
     timeCreated: "16:08",
     dateUpdated: "2023-01-22",
     timeUpdated: "16:08",
   });
+
+  const [ImageName, SetImageName] = useState<File | null | "">("");
+  const [ExistingImage, SetExistingImage] = useState("");
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const params = useParams();
   console.log(params);
@@ -58,37 +63,88 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
     });
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!update) {
-      addDevice();
-    } else {
-      updateDevice();
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
-  const addDevice = async () => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      SetImageName(event.target.files[0]);
+    } else {
+      SetImageName(null);
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+
+    if (!InputData.title || !InputData.assignedProduct) {
+      alert("Please provide valid information for all fields.");
+      return;
+    } else {
+      if (ImageName) {
+        if (ExistingImage) {
+          deleteImage(ExistingImage);
+        }
+
+        formData.append("file", ImageName);
+
+        try {
+          const uploadedImageUrl = await uploadImage(formData);
+          console.log("Uploaded image URL:", uploadedImageUrl);
+          if (uploadedImageUrl) {
+            if (!update) {
+              addDevice(uploadedImageUrl);
+            } else {
+              updateDevice(uploadedImageUrl);
+            }
+          } else {
+            alert("Something went wrong!");
+          }
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          alert("Something went wrong while uploading the image!");
+        }
+      } else if (!update) {
+        addDevice("");
+      } else {
+        updateDevice(ExistingImage);
+      }
+    }
+  };
+
+  const addDevice = async (uploadedImageUrl: string) => {
     const storedUserString = localStorage.getItem("user");
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
       const headers = {
         token: `Bearer ${storedUser.accessToken}`,
       };
-      if (!InputData.title || !InputData.assignedProduct) {
-        alert("Please provide valid information for all fields.");
-        return;
-      }
+
       try {
         const response = await axios.post(
           "http://104.245.34.253:3300/api/device/add-device/",
-          InputData,
+          {
+            title: InputData.title,
+            assignedProduct: InputData.assignedProduct,
+            imageUrl: uploadedImageUrl,
+            assignedItem: InputData.assignedItem,
+            dateCreated: InputData.dateCreated,
+            timeCreated: InputData.timeCreated,
+            dateUpdated: InputData.dateUpdated,
+            timeUpdated: InputData.timeUpdated,
+          },
           { headers }
         );
         if (response.data.status) {
           SetInputData({
             title: "",
             assignedProduct: "",
-            imageUrl: "1",
+            imageUrl: "",
             assignedItem: "659e479f798894bd3bea1fe7",
             dateCreated: "2023-01-22",
             timeCreated: "16:08",
@@ -107,23 +163,21 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
     }
   };
 
-  const updateDevice = async () => {
+  const updateDevice = async (uploadedImageUrl: string) => {
     const storedUserString = localStorage.getItem("user");
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
       const headers = {
         token: `Bearer ${storedUser.accessToken}`,
       };
-      if (!InputData.title || !InputData.assignedProduct) {
-        alert("Please provide valid information for all fields.");
-        return;
-      }
+
       try {
         const response = await axios.put(
           "http://104.245.34.253:3300/api/device/update-device/" + params.id,
           {
             title: InputData.title,
             assignedProduct: InputData.assignedProduct,
+            imageUrl: uploadedImageUrl,
           },
           { headers }
         );
@@ -131,7 +185,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
           SetInputData({
             title: "",
             assignedProduct: "",
-            imageUrl: "1",
+            imageUrl: "",
             assignedItem: "659e479f798894bd3bea1fe7",
             dateCreated: "2023-01-22",
             timeCreated: "16:08",
@@ -170,13 +224,15 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
             title: response.data.weighingDeviceData[0].title,
             assignedProduct:
               response.data.weighingDeviceData[0].assignedProduct,
-            imageUrl: "1",
+            imageUrl: response.data.weighingDeviceData[0].imageUrl,
             assignedItem: "659e479f798894bd3bea1fe7",
             dateCreated: "2023-01-22",
             timeCreated: "16:08",
             dateUpdated: "2023-01-22",
             timeUpdated: "16:08",
           });
+
+          SetExistingImage(response.data.weighingDeviceData[0].imageUrl);
         } else {
           console.error(response.data.error.message);
         }
@@ -184,6 +240,49 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
         // Handle errors here
         console.error("Error fetching data:", error);
       }
+    }
+  };
+
+  const uploadImage = async (formData: any) => {
+    try {
+      // Send formData to backend using axios or any other HTTP client
+      const response = await axios.post(
+        "http://104.245.34.253:3300/api/files/save",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.data.status) {
+        const imageUrl = response.data.fileName;
+        return imageUrl;
+      } else {
+        return undefined;
+      }
+      // Handle response from the server
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
+  const deleteImage = async (imageUrl: any) => {
+    try {
+      // Send formData to backend using axios or any other HTTP client
+      const response = await axios.delete(
+        "http://104.245.34.253:3300/api/files/delete/" + imageUrl
+      );
+
+      if (response.data.status) {
+        return true;
+      } else {
+        return false;
+      }
+      // Handle response from the server
+    } catch (error) {
+      console.error("Error uploading image:", error);
     }
   };
 
@@ -208,6 +307,36 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
             className="form-input"
             placeholder="Assigned Product"
           />
+          <br />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              marginTop: "10px",
+            }}
+          >
+            <button
+              style={{ padding: "5px" }}
+              type="button"
+              onClick={handleButtonClick}
+            >
+              Upload Image
+            </button>
+            <p style={{ fontSize: "0.8rem", marginLeft: "10px" }}>
+              {ImageName ? ImageName.name : "Not selected any image!"}
+            </p>
+          </div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept=".jpg, .jpeg, .png"
+            onChange={handleFileChange}
+            className="form-input"
+            style={{ display: "none" }}
+            placeholder="Device Image"
+          />
+          <br />
 
           <button type="submit" className="form-button">
             Save
@@ -218,7 +347,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
               SetInputData({
                 title: "",
                 assignedProduct: "",
-                imageUrl: "1",
+                imageUrl: "",
                 assignedItem: "659e479f798894bd3bea1fe7",
                 dateCreated: "2023-01-22",
                 timeCreated: "16:08",

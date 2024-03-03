@@ -13,7 +13,16 @@ const columns: GridColDef[] = [
     headerName: "Image",
     flex: 1,
     renderCell: (params) => {
-      return <img src={params.row.img || "/scaless.svg"} alt="" />;
+      return (
+        <img
+          src={
+            params.row.imageUrl
+              ? `http://104.245.34.253:3300/uploads/${params.row.imageUrl}`
+              : `/scaless.svg`
+          }
+          alt="Device Picture"
+        />
+      );
     },
   },
   {

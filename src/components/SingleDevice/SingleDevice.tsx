@@ -17,13 +17,16 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Circle from "../circle/Circle";
 import DeviceFormPopup from "../DeviceFormPopup/DeviceFormPopup";
+import ImagePopup from "../ImagePopup/ImagePopup";
 import CircularProgressBar from "../CircularProgressBar/CircularProgressBar";
 
 const SingleDevice = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isImgPopupOpen, setIsImgPopupOpen] = useState(false);
 
   // Device recent data
   const [DeviceRecentData, SetDeviceRecentData] = useState<any[]>([]);
+  console.log(DeviceRecentData);
 
   const [ChartData, SetChartData] = useState([]);
 
@@ -43,6 +46,14 @@ const SingleDevice = () => {
 
   const closeForm = () => {
     setIsFormOpen(false);
+  };
+
+  const openImgPopup = () => {
+    setIsImgPopupOpen(true);
+  };
+
+  const closeImgPopup = () => {
+    setIsImgPopupOpen(false);
   };
 
   useEffect(() => {
@@ -205,7 +216,16 @@ const SingleDevice = () => {
         <div className="view">
           <div className="info">
             <div className="topInfo">
-              <img src="/scale.svg" alt="" />
+              <img
+                style={{ cursor: "pointer" }}
+                src={
+                  DeviceRecentData[0].imageUrl
+                    ? `http://104.245.34.253:3300/uploads/${DeviceRecentData[0].imageUrl}`
+                    : `/scale.svg`
+                }
+                alt="Device Picture"
+                onClick={openImgPopup}
+              />
               <h1>{DeviceRecentData[0].title}</h1>
               {UserType == "admin" ? (
                 <button onClick={openForm}>Edit Information</button>
@@ -393,6 +413,17 @@ const SingleDevice = () => {
         <p>No Data Available...</p>
       )}
       <DeviceFormPopup isOpen={isFormOpen} update={true} onClose={closeForm} />
+      {DeviceRecentData.length > 0 ? (
+        <ImagePopup
+          isOpen={isImgPopupOpen}
+          onClose={closeImgPopup}
+          imageSrc={
+            DeviceRecentData[0].imageUrl
+              ? `http://104.245.34.253:3300/uploads/${DeviceRecentData[0].imageUrl}`
+              : `/scale.svg`
+          }
+        />
+      ) : null}
     </div>
   );
 };

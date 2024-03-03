@@ -6,6 +6,8 @@ import axios from "axios";
 
 interface RuleFormPopupProps {
   isOpen: boolean;
+  update: boolean;
+  ruleId: string;
   onClose: () => void;
 }
 
@@ -15,7 +17,12 @@ interface RuleFormState {
   emailStatus: string;
 }
 
-const RuleFormPopup: React.FC<RuleFormPopupProps> = ({ isOpen, onClose }) => {
+const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
+  isOpen,
+  onClose,
+  update,
+  ruleId,
+}) => {
   const [InputData, SetInputData] = useState<RuleFormState>({
     userId: "none",
     deviceId: "none",
@@ -26,6 +33,12 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({ isOpen, onClose }) => {
 
   console.log(UsersData);
   console.log(DevicesData);
+
+  useEffect(() => {
+    if (update) {
+      getRule();
+    }
+  }, [ruleId, isOpen]);
 
   useEffect(() => {
     fetchUsers();
@@ -45,6 +58,15 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!update) {
+      addRule();
+    } else {
+      updateRule();
+    }
+  };
+
+  // Add rule
+  const addRule = async () => {
     const storedUserString = localStorage.getItem("user");
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
@@ -122,6 +144,68 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({ isOpen, onClose }) => {
         );
         console.log(response.data.devices);
         SetDevicesData(response.data.devices);
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
+    }
+  };
+
+  const updateRule = async () => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
+
+      try {
+        const response = await axios.put(
+          "http://104.245.34.253:3300/api/rules/update/" + ruleId,
+          InputData,
+          { headers }
+        );
+        if (response.data.status) {
+          SetInputData({
+            userId: "none",
+            deviceId: "none",
+            emailStatus: "none",
+          });
+          alert(response.data.success.message);
+          onClose();
+        } else {
+          alert(response.data.error.message);
+        }
+      } catch (error: any) {
+        alert(error.response.data.error.message);
+        // Handle errors here
+        console.error("Error fetching data:", error);
+      }
+    }
+  };
+
+  const getRule = async () => {
+    const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+      const storedUser = JSON.parse(storedUserString);
+      const headers = {
+        token: `Bearer ${storedUser.accessToken}`,
+      };
+
+      try {
+        const response = await axios.get(
+          "http://104.245.34.253:3300/api/rules/one/" + ruleId,
+          { headers }
+        );
+        if (response.data.status) {
+          SetInputData({
+            userId: response.data.rule.userId,
+            deviceId: response.data.rule.deviceId,
+            emailStatus: response.data.rule.emailStatus,
+          });
+        } else {
+          console.error(response.data.error.message);
+        }
       } catch (error) {
         // Handle errors here
         console.error("Error fetching data:", error);

@@ -15,10 +15,19 @@ const columns: GridColDef[] = [
   },
   {
     field: "img",
-    headerName: "Avatar",
+    headerName: "Profile Picture",
     flex: 1,
     renderCell: (params) => {
-      return <img src={params.row.img || "/noavatar.png"} alt="" />;
+      return (
+        <img
+          src={
+            params.row.imageUrl
+              ? `http://104.245.34.253:3300/uploads/${params.row.imageUrl}`
+              : `/noavatar.png`
+          }
+          alt="Profile Picture"
+        />
+      );
     },
   },
   {
