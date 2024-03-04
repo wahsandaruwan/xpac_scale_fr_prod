@@ -40,6 +40,8 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
 
   const [UserType, SetUserType] = useState("");
 
+  const [LoadingState, SetLoadingState] = useState(false);
+
   const [ImageName, SetImageName] = useState<File | null | "">("");
   const [ExistingImage, SetExistingImage] = useState("");
 
@@ -101,8 +103,8 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
       InputData.userType === "none"
     ) {
       alert("Please provide valid information for all fields.");
-      return;
     } else {
+      SetLoadingState(true);
       if (ImageName) {
         if (ExistingImage) {
           deleteImage(ExistingImage);
@@ -114,6 +116,7 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
           const uploadedImageUrl = await uploadImage(formData);
           console.log("Uploaded image URL:", uploadedImageUrl);
           if (uploadedImageUrl) {
+            SetImageName("");
             if (!update) {
               addUser(uploadedImageUrl);
             } else {
@@ -165,6 +168,7 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
             userType: "none",
             adminChange: false,
           });
+          SetLoadingState(false);
           alert(response.data.success.message);
           onClose();
         } else {
@@ -211,6 +215,7 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
             userType: "none",
             adminChange: false,
           });
+          SetLoadingState(false);
           alert(response.data.success.message);
           onClose();
         } else {
@@ -305,115 +310,121 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
   return (
     <div className={`popup-container ${isOpen ? "open" : "closed"}`}>
       <div className="popup-content">
-        <h2 className="heading">{!update ? "Add User" : "Update User"}</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="fullName"
-            value={InputData.fullName}
-            onChange={handleInputChange}
-            className="form-input"
-            placeholder="Full Name"
-          />
-          <br />
-          <input
-            type="email"
-            name="emailAddress"
-            value={InputData.emailAddress}
-            onChange={handleInputChange}
-            className="form-input"
-            placeholder="Email Address"
-          />
-          <br />
-          <input
-            type="password"
-            name="password"
-            value={InputData.password}
-            onChange={handleInputChange}
-            className="form-input"
-            placeholder={!update ? "Password" : "New or Old Password"}
-          />
-          <br />
-          <input
-            type="number"
-            name="phoneNumber"
-            value={InputData.phoneNumber}
-            onChange={handleInputChange}
-            className="form-input"
-            placeholder="Phone Number"
-          />
-          <br />
-          {UserType == "admin" ? (
-            <select
-              name="userType"
-              value={InputData.userType}
-              onChange={handleInputChange}
-              className="form-input"
-            >
-              <option value="none" disabled>
-                User Type
-              </option>
-              <option value="customer">Customer</option>
-              <option value="moderator">Moderator</option>
-              <option value="admin">Admin</option>
-            </select>
-          ) : null}
+        {LoadingState ? (
+          <p>Wait a moment...</p>
+        ) : (
+          <>
+            <h2 className="heading">{!update ? "Add User" : "Update User"}</h2>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="fullName"
+                value={InputData.fullName}
+                onChange={handleInputChange}
+                className="form-input"
+                placeholder="Full Name"
+              />
+              <br />
+              <input
+                type="email"
+                name="emailAddress"
+                value={InputData.emailAddress}
+                onChange={handleInputChange}
+                className="form-input"
+                placeholder="Email Address"
+              />
+              <br />
+              <input
+                type="password"
+                name="password"
+                value={InputData.password}
+                onChange={handleInputChange}
+                className="form-input"
+                placeholder={!update ? "Password" : "New or Old Password"}
+              />
+              <br />
+              <input
+                type="number"
+                name="phoneNumber"
+                value={InputData.phoneNumber}
+                onChange={handleInputChange}
+                className="form-input"
+                placeholder="Phone Number"
+              />
+              <br />
+              {UserType == "admin" ? (
+                <select
+                  name="userType"
+                  value={InputData.userType}
+                  onChange={handleInputChange}
+                  className="form-input"
+                >
+                  <option value="none" disabled>
+                    User Type
+                  </option>
+                  <option value="customer">Customer</option>
+                  <option value="moderator">Moderator</option>
+                  <option value="admin">Admin</option>
+                </select>
+              ) : null}
 
-          <br />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              marginTop: "10px",
-            }}
-          >
-            <button
-              style={{ padding: "5px" }}
-              type="button"
-              onClick={handleButtonClick}
-            >
-              Upload Image
-            </button>
-            <p style={{ fontSize: "0.8rem", marginLeft: "10px" }}>
-              {ImageName ? ImageName.name : "Not selected any image!"}
-            </p>
-          </div>
-          <input
-            type="file"
-            ref={fileInputRef}
-            accept=".jpg, .jpeg, .png"
-            onChange={handleFileChange}
-            className="form-input"
-            style={{ display: "none" }}
-            placeholder="Profile Image"
-          />
-          <br />
-          <button type="submit" className="form-button">
-            Save
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              SetInputData({
-                fullName: "",
-                emailAddress: "",
-                password: "",
-                phoneNumber: "",
-                imageUrl: "",
-                userType: "none",
-                adminChange: false,
-              });
-              SetImageName(null);
-            }}
-            className="form-button"
-          >
-            Clear
-          </button>
-          <button type="button" onClick={onClose} className="form-button">
-            Close
-          </button>
-        </form>
+              <br />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  marginTop: "10px",
+                }}
+              >
+                <button
+                  style={{ padding: "5px" }}
+                  type="button"
+                  onClick={handleButtonClick}
+                >
+                  Upload Image
+                </button>
+                <p style={{ fontSize: "0.8rem", marginLeft: "10px" }}>
+                  {ImageName ? ImageName.name : "Not selected any image!"}
+                </p>
+              </div>
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept=".jpg, .jpeg, .png"
+                onChange={handleFileChange}
+                className="form-input"
+                style={{ display: "none" }}
+                placeholder="Profile Image"
+              />
+              <br />
+              <button type="submit" className="form-button">
+                Save
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  SetInputData({
+                    fullName: "",
+                    emailAddress: "",
+                    password: "",
+                    phoneNumber: "",
+                    imageUrl: "",
+                    userType: "none",
+                    adminChange: false,
+                  });
+                  SetImageName(null);
+                }}
+                className="form-button"
+              >
+                Clear
+              </button>
+              <button type="button" onClick={onClose} className="form-button">
+                Close
+              </button>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );

@@ -1,0 +1,10 @@
+.loading {
+  position: absolute;
+  z-index: 1000000;
+  width: 100vw;
+  height: 100vh;
+  background-color: green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

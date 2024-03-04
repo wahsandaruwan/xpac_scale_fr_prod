@@ -28,6 +28,7 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
     deviceId: "none",
     emailStatus: "none",
   });
+  const [LoadingState, SetLoadingState] = useState(false);
   const [UsersData, SetUsersData] = useState<any[]>([]);
   const [DevicesData, SetDevicesData] = useState<any[]>([]);
 
@@ -58,6 +59,7 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    SetLoadingState(true);
     if (!update) {
       addRule();
     } else {
@@ -93,6 +95,7 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
             deviceId: "none",
             emailStatus: "none",
           });
+          SetLoadingState(false);
           alert(response.data.success.message);
           onClose();
         } else {
@@ -171,6 +174,7 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
             deviceId: "none",
             emailStatus: "none",
           });
+          SetLoadingState(false);
           alert(response.data.success.message);
           onClose();
         } else {
@@ -216,57 +220,61 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
   return (
     <div className={`popup-container ${isOpen ? "open" : "closed"}`}>
       <div className="popup-content">
-        <h2 className="heading">{!update ? "Add Rule" : "Update Rule"}</h2>
-        <form onSubmit={handleSubmit}>
-          <select
-            name="userId"
-            value={InputData.userId}
-            onChange={handleInputChange}
-            className="form-input"
-          >
-            <option value="none" disabled>
-              User
-            </option>
-            {UsersData.length > 0
-              ? UsersData.map((item, index) => (
-                  <option value={item._id} key={Date.now() + index}>
-                    {item.fullName}
-                  </option>
-                ))
-              : null}
-          </select>
-          <br />
-          <select
-            name="deviceId"
-            value={InputData.deviceId}
-            onChange={handleInputChange}
-            className="form-input"
-          >
-            <option value="none" disabled>
-              Device
-            </option>
-            {DevicesData.length > 0
-              ? DevicesData.map((item, index) => (
-                  <option value={item._id} key={Date.now() + index}>
-                    {item.title}
-                  </option>
-                ))
-              : null}
-          </select>
-          <br />
-          <select
-            name="emailStatus"
-            value={InputData.emailStatus}
-            onChange={handleInputChange}
-            className="form-input"
-          >
-            <option value="none" disabled>
-              Send Email
-            </option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
-          {/* <div>
+        {LoadingState ? (
+          <p>Wait a moment...</p>
+        ) : (
+          <>
+            <h2 className="heading">{!update ? "Add Rule" : "Update Rule"}</h2>
+            <form onSubmit={handleSubmit}>
+              <select
+                name="userId"
+                value={InputData.userId}
+                onChange={handleInputChange}
+                className="form-input"
+              >
+                <option value="none" disabled>
+                  User
+                </option>
+                {UsersData.length > 0
+                  ? UsersData.map((item, index) => (
+                      <option value={item._id} key={Date.now() + index}>
+                        {item.fullName}
+                      </option>
+                    ))
+                  : null}
+              </select>
+              <br />
+              <select
+                name="deviceId"
+                value={InputData.deviceId}
+                onChange={handleInputChange}
+                className="form-input"
+              >
+                <option value="none" disabled>
+                  Device
+                </option>
+                {DevicesData.length > 0
+                  ? DevicesData.map((item, index) => (
+                      <option value={item._id} key={Date.now() + index}>
+                        {item.title}
+                      </option>
+                    ))
+                  : null}
+              </select>
+              <br />
+              <select
+                name="emailStatus"
+                value={InputData.emailStatus}
+                onChange={handleInputChange}
+                className="form-input"
+              >
+                <option value="none" disabled>
+                  Send Email
+                </option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+              {/* <div>
             <p>Users</p>
             <div>
               <div>
@@ -276,26 +284,28 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
               </div>
             </div>
           </div> */}
-          <button type="submit" className="form-button">
-            Save
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              SetInputData({
-                userId: "none",
-                deviceId: "none",
-                emailStatus: "none",
-              });
-            }}
-            className="form-button"
-          >
-            Clear
-          </button>
-          <button type="button" onClick={onClose} className="form-button">
-            Close
-          </button>
-        </form>
+              <button type="submit" className="form-button">
+                Save
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  SetInputData({
+                    userId: "none",
+                    deviceId: "none",
+                    emailStatus: "none",
+                  });
+                }}
+                className="form-button"
+              >
+                Clear
+              </button>
+              <button type="button" onClick={onClose} className="form-button">
+                Close
+              </button>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );

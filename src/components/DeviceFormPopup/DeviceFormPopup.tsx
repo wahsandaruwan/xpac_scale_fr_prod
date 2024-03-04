@@ -38,6 +38,8 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
     timeUpdated: "16:08",
   });
 
+  const [LoadingState, SetLoadingState] = useState(false);
+
   const [ImageName, SetImageName] = useState<File | null | "">("");
   const [ExistingImage, SetExistingImage] = useState("");
 
@@ -84,8 +86,8 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
 
     if (!InputData.title || !InputData.assignedProduct) {
       alert("Please provide valid information for all fields.");
-      return;
     } else {
+      SetLoadingState(true);
       if (ImageName) {
         if (ExistingImage) {
           deleteImage(ExistingImage);
@@ -97,6 +99,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
           const uploadedImageUrl = await uploadImage(formData);
           console.log("Uploaded image URL:", uploadedImageUrl);
           if (uploadedImageUrl) {
+            SetImageName("");
             if (!update) {
               addDevice(uploadedImageUrl);
             } else {
@@ -151,6 +154,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
             dateUpdated: "2023-01-22",
             timeUpdated: "16:08",
           });
+          SetLoadingState(false);
           alert(response.data.success.message);
           onClose();
         } else {
@@ -192,6 +196,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
             dateUpdated: "2023-01-22",
             timeUpdated: "16:08",
           });
+          SetLoadingState(false);
           alert(response.data.success.message);
           onClose();
         } else {
@@ -289,80 +294,88 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
   return (
     <div className={`popup-container ${isOpen ? "open" : "closed"}`}>
       <div className="popup-content">
-        <h2 className="heading">{!update ? "Add Device" : "Update Device"}</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="title"
-            value={InputData.title}
-            onChange={handleInputChange}
-            className="form-input"
-            placeholder="Device Title"
-          />
-          <input
-            type="text"
-            name="assignedProduct"
-            value={InputData.assignedProduct}
-            onChange={handleInputChange}
-            className="form-input"
-            placeholder="Assigned Product"
-          />
-          <br />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              marginTop: "10px",
-            }}
-          >
-            <button
-              style={{ padding: "5px" }}
-              type="button"
-              onClick={handleButtonClick}
-            >
-              Upload Image
-            </button>
-            <p style={{ fontSize: "0.8rem", marginLeft: "10px" }}>
-              {ImageName ? ImageName.name : "Not selected any image!"}
-            </p>
-          </div>
-          <input
-            type="file"
-            ref={fileInputRef}
-            accept=".jpg, .jpeg, .png"
-            onChange={handleFileChange}
-            className="form-input"
-            style={{ display: "none" }}
-            placeholder="Device Image"
-          />
-          <br />
+        {LoadingState ? (
+          <p>Wait a moment...</p>
+        ) : (
+          <>
+            <h2 className="heading">
+              {!update ? "Add Device" : "Update Device"}
+            </h2>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="title"
+                value={InputData.title}
+                onChange={handleInputChange}
+                className="form-input"
+                placeholder="Device Title"
+              />
+              <input
+                type="text"
+                name="assignedProduct"
+                value={InputData.assignedProduct}
+                onChange={handleInputChange}
+                className="form-input"
+                placeholder="Assigned Product"
+              />
+              <br />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  marginTop: "10px",
+                }}
+              >
+                <button
+                  style={{ padding: "5px" }}
+                  type="button"
+                  onClick={handleButtonClick}
+                >
+                  Upload Image
+                </button>
+                <p style={{ fontSize: "0.8rem", marginLeft: "10px" }}>
+                  {ImageName ? ImageName.name : "Not selected any image!"}
+                </p>
+              </div>
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept=".jpg, .jpeg, .png"
+                onChange={handleFileChange}
+                className="form-input"
+                style={{ display: "none" }}
+                placeholder="Device Image"
+              />
+              <br />
 
-          <button type="submit" className="form-button">
-            Save
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              SetInputData({
-                title: "",
-                assignedProduct: "",
-                imageUrl: "",
-                assignedItem: "659e479f798894bd3bea1fe7",
-                dateCreated: "2023-01-22",
-                timeCreated: "16:08",
-                dateUpdated: "2023-01-22",
-                timeUpdated: "16:08",
-              });
-            }}
-            className="form-button"
-          >
-            Clear
-          </button>
-          <button type="button" onClick={onClose} className="form-button">
-            Close
-          </button>
-        </form>
+              <button type="submit" className="form-button">
+                Save
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  SetInputData({
+                    title: "",
+                    assignedProduct: "",
+                    imageUrl: "",
+                    assignedItem: "659e479f798894bd3bea1fe7",
+                    dateCreated: "2023-01-22",
+                    timeCreated: "16:08",
+                    dateUpdated: "2023-01-22",
+                    timeUpdated: "16:08",
+                  });
+                }}
+                className="form-button"
+              >
+                Clear
+              </button>
+              <button type="button" onClick={onClose} className="form-button">
+                Close
+              </button>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );
