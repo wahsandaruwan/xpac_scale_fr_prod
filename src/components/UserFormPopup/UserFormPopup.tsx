@@ -168,7 +168,6 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
             userType: "none",
             adminChange: false,
           });
-          SetLoadingState(false);
           alert(response.data.success.message);
           onClose();
         } else {
@@ -178,6 +177,8 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
         alert(error.response.data.error.message);
         // Handle errors here
         console.error("Error fetching data:", error);
+      } finally {
+        SetLoadingState(false);
       }
     }
   };
@@ -215,7 +216,6 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
             userType: "none",
             adminChange: false,
           });
-          SetLoadingState(false);
           alert(response.data.success.message);
           onClose();
         } else {
@@ -225,6 +225,8 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
         alert(error.response.data.error.message);
         // Handle errors here
         console.error("Error fetching data:", error);
+      } finally {
+        SetLoadingState(false);
       }
     }
   };

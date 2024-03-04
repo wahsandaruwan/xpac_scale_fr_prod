@@ -154,7 +154,6 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
             dateUpdated: "2023-01-22",
             timeUpdated: "16:08",
           });
-          SetLoadingState(false);
           alert(response.data.success.message);
           onClose();
         } else {
@@ -163,6 +162,8 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
       } catch (error: any) {
         alert(error.response.data.error.message);
         console.error("Error fetching data:", error);
+      } finally {
+        SetLoadingState(false);
       }
     }
   };
@@ -196,7 +197,6 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
             dateUpdated: "2023-01-22",
             timeUpdated: "16:08",
           });
-          SetLoadingState(false);
           alert(response.data.success.message);
           onClose();
         } else {
@@ -206,6 +206,8 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
         alert(error.response.data.error.message);
         // Handle errors here
         console.error("Error fetching data:", error);
+      } finally {
+        SetLoadingState(false);
       }
     }
   };

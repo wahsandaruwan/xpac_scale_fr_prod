@@ -95,7 +95,6 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
             deviceId: "none",
             emailStatus: "none",
           });
-          SetLoadingState(false);
           alert(response.data.success.message);
           onClose();
         } else {
@@ -104,6 +103,8 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
       } catch (error: any) {
         alert(error.response.data.error.message);
         console.error("Error fetching data:", error);
+      } finally {
+        SetLoadingState(false);
       }
     }
   };
@@ -174,7 +175,6 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
             deviceId: "none",
             emailStatus: "none",
           });
-          SetLoadingState(false);
           alert(response.data.success.message);
           onClose();
         } else {
@@ -184,6 +184,8 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
         alert(error.response.data.error.message);
         // Handle errors here
         console.error("Error fetching data:", error);
+      } finally {
+        SetLoadingState(false);
       }
     }
   };
