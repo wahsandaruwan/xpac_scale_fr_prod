@@ -1,114 +1,169 @@
 @import "../../styles/responsive.scss";
 
+// .single {
+//   display: flex;
+
+//   @include xl {
+//     flex-direction: column;
+//     gap: 50px;
+//   }
+
+//   .view {
+//     flex: 1;
+
+//     .info {
+//       .topInfo {
+//         display: flex;
+//         align-items: center;
+//         gap: 20px;
+
+//         img {
+//           width: 100px;
+//           height: 100px;
+//           border-radius: 20px;
+//           object-fit: cover;
+//         }
+
+//         h1 {
+//           font-weight: 500;
+//         }
+//       }
+//       .details {
+//         font-size: 18px;
+
+//         .item {
+//           margin: 30px 0px;
+
+//           .itemTitle {
+//             font-weight: 600;
+//             margin-right: 10px;
+//             text-transform: capitalize;
+//           }
+//         }
+//       }
+//     }
+
+//     hr {
+//       width: 90%;
+//       height: 0;
+//       border: 0.5px solid gray;
+//       margin: 20px 0px;
+
+//       @include md {
+//         display: none;
+//       }
+//     }
+
+//     .chart {
+//       margin-top: 50px;
+//       width: 80%;
+//       height: 400px;
+
+//       @include md {
+//         display: none;
+//       }
+//     }
+//   }
+//   .activities {
+//     flex: 1;
+
+//     h2 {
+//       margin-bottom: 20px;
+//     }
+
+//     ul {
+//       li {
+//         list-style-type: none;
+//         position: relative;
+//         width: 1px;
+//         padding-top: 50px;
+//         background-color: #f45b69;
+
+//         &::after {
+//           content: "";
+//           position: absolute;
+//           left: 50%;
+//           bottom: 0;
+//           width: 10px;
+//           height: 10px;
+//           border-radius: 50%;
+//           background-color: #f45b69;
+//           transform: translateX(-50%);
+//         }
+
+//         div {
+//           min-width: 480px;
+//           padding: 15px;
+//           background-color: #f45b6810;
+
+//           @include md {
+//             min-width: 250px;
+//           }
+
+//           p {
+//             margin-bottom: 5px;
+//           }
+
+//           time {
+//             font-size: 12px;
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
 .single {
   display: flex;
+}
 
-  @include xl{
-    flex-direction: column;
-    gap: 50px;
-  }
+.banner_profile {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+}
 
-  .view {
-    flex: 1;
+.banner_profile > img {
+  width: 100%;
+  background-size: cover;
+}
 
-    .info {
-      .topInfo {
-        display: flex;
-        align-items: center;
-        gap: 20px;
+.info_profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
-        img {
-          width: 100px;
-          height: 100px;
-          border-radius: 20px;
-          object-fit: cover;
-        }
+.profile_img {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translate(-50%, -75%);
+  width: 160px;
+  height: 160px;
+  border-radius: 25px;
+  overflow: hidden;
+  border: 4px #000000 solid;
+}
 
-        h1 {
-          font-weight: 500;
-        }
-      }
-      .details {
-        font-size: 18px;
+.profile_img > img {
+  width: 100%;
+  height: 100%;
+}
 
-        .item {
-          margin: 30px 0px;
+.banner > button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  cursor: pointer;
+}
 
-          .itemTitle {
-            font-weight: 600;
-            margin-right: 10px;
-            text-transform: capitalize;
-          }
-        }
-      }
-    }
+.topInfo {
+  margin-top: 10px;
+}
 
-    hr {
-      width: 90%;
-      height: 0;
-      border: 0.5px solid gray;
-      margin: 20px 0px;
-
-      @include md{
-        display: none;
-      }
-    }
-
-    .chart {
-      margin-top: 50px;
-      width: 80%;
-      height: 400px;
-
-      @include md{
-        display: none;
-      }
-    }
-  }
-  .activities {
-    flex: 1;
-
-    h2 {
-      margin-bottom: 20px;
-    }
-
-    ul {
-      li {
-        list-style-type: none;
-        position: relative;
-        width: 1px;
-        padding-top: 50px;
-        background-color: #f45b69;
-
-        &::after {
-          content: "";
-          position: absolute;
-          left: 50%;
-          bottom: 0;
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background-color: #f45b69;
-          transform: translateX(-50%);
-        }
-
-        div {
-          min-width: 480px;
-          padding: 15px;
-          background-color: #f45b6810;
-
-          @include md{
-            min-width: 250px;
-          }
-
-          p{
-            margin-bottom: 5px;
-          }
-
-          time{
-            font-size: 12px;
-          }
-        }
-      }
-    }
-  }
+.details_profile {
+  text-align: center;
 }

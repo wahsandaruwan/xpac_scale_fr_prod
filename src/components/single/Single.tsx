@@ -92,22 +92,27 @@ const Single = () => {
     <div className="single">
       {UserData.fullName ? (
         <div className="view">
-          <div className="info">
-            <div className="topInfo">
-              <img
-                style={{ cursor: "pointer" }}
-                src={
-                  UserData.imageUrl
-                    ? `http://104.245.34.253:3300/uploads/${UserData.imageUrl}`
-                    : `/noavatar.png`
-                }
-                alt="Profile Picture"
-                onClick={openImgPopup}
-              />
-              <h1>{UserData.fullName}</h1>
+          <div className="info info_profile">
+            <div className="banner banner_profile">
+              <img src="/cover_image.jpg" alt="" />
+              <div className="profile_img">
+                <img
+                  style={{ cursor: "pointer" }}
+                  src={
+                    UserData.imageUrl
+                      ? `http://104.245.34.253:3300/uploads/${UserData.imageUrl}`
+                      : `/noavatar.png`
+                  }
+                  alt="Profile Picture"
+                  onClick={openImgPopup}
+                />
+              </div>
               <button onClick={openForm}>Edit Information</button>
             </div>
-            <div className="details">
+            <div className="topInfo">
+              <h1>{UserData.fullName}</h1>
+            </div>
+            <div className="details details_profile">
               <div className="item">
                 <span className="itemTitle">ID : </span>
                 <span className="itemValue">{UserData._id}</span>
@@ -150,7 +155,7 @@ const Single = () => {
               </div>
             </div>
           </div>
-          <hr />
+          <hr style={{ marginLeft: "auto", marginRight: "auto" }} />
         </div>
       ) : (
         <p>No Data Available...</p>
