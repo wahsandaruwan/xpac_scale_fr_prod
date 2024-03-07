@@ -11,7 +11,7 @@
   right: 30px;
 }
 
-.main-lg > .form-input {
+.main-lg .form-input {
   width: 100%;
   background-color: $main-bg; // Input background color
   color: #2a3447; // Input text color
@@ -22,7 +22,7 @@
   font-size: 0.9rem;
 }
 
-.main-lg > .form-button {
+.main-lg .form-button {
   width: 100%;
   color: #2a3447;
   border: 1px solid #2a3447;
