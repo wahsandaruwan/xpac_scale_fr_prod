@@ -7,12 +7,16 @@ import {
   YAxis,
 } from "recharts";
 import "./deviceCustomerCountChart.scss";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const DeviceCustomerCountChart = ({ bigChartData }: { bigChartData: any }) => {
+  const { themeColors } = useTheme();
   console.log(bigChartData);
   return (
     <div className="bigChartBox">
-      <h1 style={{ marginBottom: "20px" }}>Customer and Device Counts</h1>
+      <h1 style={{ marginBottom: "20px", color: themeColors.mainColor }}>
+        Customer and Device Counts
+      </h1>
       <div className="chart">
         {bigChartData.length > 0 ? (
           <ResponsiveContainer width="99%" height="100%">

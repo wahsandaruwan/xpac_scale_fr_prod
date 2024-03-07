@@ -1,4 +1,4 @@
-// UserFormPopup.scss
+@import "../../styles/variables.scss";
 
 .popup-container {
   display: none;
@@ -18,7 +18,7 @@
 
   .popup-content {
     min-width: 500px;
-    background-color: #2a3447; // Background color
+    background-color: $soft-bg !important; // Background color
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -47,6 +47,7 @@
       border-radius: 4px;
       padding: 8px 30px;
       margin: 4px 0;
+      margin-right: 5px !important;
       cursor: pointer;
     }
   }

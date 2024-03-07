@@ -1,4 +1,5 @@
 import CircularProgressBar from "../CircularProgressBar/CircularProgressBar";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const SummaryCard = ({
   id,
@@ -11,22 +12,27 @@ const SummaryCard = ({
   itemCount: any;
   batteryPercentage: any;
 }) => {
+  const { themeColors } = useTheme();
   console.log("batteryPercentage");
   return (
     <div
       style={{
         padding: "15px",
         backgroundColor: "transparent",
-        border: "solid 2px #ffffff",
+        border: `solid 2px ${themeColors.mainColor}`,
         borderRadius: "10px",
       }}
     >
       <p
-        style={{ fontSize: "0.65 rem", color: "#ffffff", marginBottom: "5px" }}
+        style={{
+          fontSize: "0.65 rem",
+          marginBottom: "5px",
+          color: themeColors.mainColor,
+        }}
       >
         ID : {id}
       </p>
-      <p style={{ fontSize: "0.65 rem", color: "#ffffff" }}>
+      <p style={{ fontSize: "0.65 rem", color: themeColors.mainColor }}>
         Device Title : {deviceTitle}
       </p>
       <div

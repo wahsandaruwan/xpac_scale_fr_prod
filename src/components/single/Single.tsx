@@ -4,8 +4,10 @@ import "./single.scss";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const Single = () => {
+  const { themeColors } = useTheme();
   // Users data
   const [UserData, SetUserData] = useState<any>({});
 
@@ -109,10 +111,13 @@ const Single = () => {
               </div>
               <button onClick={openForm}>Edit Information</button>
             </div>
-            <div className="topInfo">
+            <div className="topInfo" style={{ color: themeColors.mainColor }}>
               <h1>{UserData.fullName}</h1>
             </div>
-            <div className="details details_profile">
+            <div
+              className="details details_profile"
+              style={{ color: themeColors.mainColor }}
+            >
               <div className="item">
                 <span className="itemTitle">ID : </span>
                 <span className="itemValue">{UserData._id}</span>

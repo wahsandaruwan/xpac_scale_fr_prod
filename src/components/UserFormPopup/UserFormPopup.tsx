@@ -380,7 +380,11 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
                 }}
               >
                 <button
-                  style={{ padding: "5px" }}
+                  style={{
+                    padding: "5px",
+                    borderRadius: "4px",
+                    border: "1px solid #2a3447",
+                  }}
                   type="button"
                   onClick={handleButtonClick}
                 >

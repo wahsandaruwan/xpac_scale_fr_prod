@@ -5,6 +5,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import RuleFormPopup from "../../components/RuleFormPopup/RuleFormPopup";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const columns: GridColDef[] = [
   { field: "_id", headerName: "ID", flex: 1 },
@@ -49,6 +50,7 @@ const columns: GridColDef[] = [
 ];
 
 const Rules = () => {
+  const { themeColors } = useTheme();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [UserType, SetUserType] = useState("");
 
@@ -126,7 +128,7 @@ const Rules = () => {
   return (
     <div className="products">
       <div className="info">
-        <h1>All Rules</h1>
+        <h1 style={{ color: themeColors.mainColor }}>All Rules</h1>
         {UserType == "admin" ? (
           <button onClick={openForm}>Add New Rule</button>
         ) : null}

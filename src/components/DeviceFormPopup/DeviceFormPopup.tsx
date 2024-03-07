@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import "./deviceForm.scss"; // Import the SCSS file
 import axios from "axios";
 import { useParams } from "react-router-dom";
+// import { useTheme } from "../../contexts/ThemeContext";
 
 interface DeviceFormPopupProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
   update,
   onClose,
 }) => {
+  // const { themeColors } = useTheme();
   const [InputData, SetInputData] = useState<DeviceFormState>({
     title: "",
     assignedProduct: "",
@@ -330,7 +332,11 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
                 }}
               >
                 <button
-                  style={{ padding: "5px" }}
+                  style={{
+                    padding: "5px",
+                    borderRadius: "4px",
+                    border: "1px solid #2a3447",
+                  }}
                   type="button"
                   onClick={handleButtonClick}
                 >

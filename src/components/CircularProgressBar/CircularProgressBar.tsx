@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./circularProgressBar.scss";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface CircularProgressBarProps {
   CurrentValue: number;
@@ -26,6 +27,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   Icon,
   Title,
 }) => {
+  const { themeColors } = useTheme();
   const [ShowCurrentValue, setCurrentValue] = useState(0);
   const [BarColor, setBarColor] = useState("#e74c3c");
   const [DashOffSet, setDashOffSet] = useState(0);
@@ -108,7 +110,13 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
 
   return (
     <div className="progress-bar">
-      <div className="outer">
+      <div
+        className="outer"
+        style={{
+          boxShadow: `3px 3px 5px -1px ${themeColors.softColor},
+    -3px -3px 5px -1px ${themeColors.softColor}`,
+        }}
+      >
         <div
           className="inner"
           style={{ backgroundColor: InnerColor, border: InnerColor }}

@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import "./menu.scss";
 import { menu } from "../../data";
 import { useState, useEffect } from "react";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const Menu = () => {
+  const { theme, themeColors } = useTheme();
   const [UserType, SetUserType] = useState("");
 
   useEffect(() => {
@@ -14,57 +16,43 @@ const Menu = () => {
     }
   }, []);
 
-  // return UserType != "customer" ? (
-  //   <div className="menu">
-  //     {menu.map((item) => (
-  //       <div className="item" key={item.id}>
-  //         <span className="title">{item.title}</span>
-  //         {item.listItems.map((listItem) => (
-  //           <Link to={listItem.url} className="listItem" key={listItem.id}>
-  //             <img src={listItem.icon} alt="" style={{ width: "20px" }} />
-  //             <span className="listItemTitle">{listItem.title}</span>
-  //           </Link>
-  //         ))}
-  //       </div>
-  //     ))}
-  //   </div>
-  // ) : (
-  //   <div className="menu">
-  //     {menu.map((item) => (
-  //       <div className="item" key={item.id}>
-  //         <span className="title">{item.title}</span>
-  //         {item.listItems.map((listItem) =>
-  //           listItem.title == "Devices" ||
-  //           listItem.title == "Profile" ||
-  //           listItem.title == "Summary" ? (
-  //             <Link to={listItem.url} className="listItem" key={listItem.id}>
-  //               <img src={listItem.icon} alt="" style={{ width: "20px" }} />
-  //               <span className="listItemTitle">{listItem.title}</span>
-  //             </Link>
-  //           ) : null
-  //         )}
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
-
   return (
-    <div className="menu">
+    <div className="menu" style={{ backgroundColor: themeColors.mainBg }}>
       {menu.map((item) => (
         <div className="item" key={item.id}>
-          <span className="title">{item.title}</span>
+          <span className="title" style={{ color: themeColors.mainColor }}>
+            {item.title}
+          </span>
           {item.listItems.map((listItem) =>
             UserType ? (
               UserType != "customer" ? (
-                <Link to={listItem.url} className="listItem" key={listItem.id}>
-                  <img src={listItem.icon} alt="" style={{ width: "20px" }} />
+                <Link
+                  to={listItem.url}
+                  className="listItem"
+                  style={{ color: themeColors.mainColor }}
+                  key={listItem.id}
+                >
+                  <img
+                    src={theme == "dark" ? listItem.icon : listItem.darkIcon}
+                    alt=""
+                    style={{ width: "20px" }}
+                  />
                   <span className="listItemTitle">{listItem.title}</span>
                 </Link>
               ) : listItem.title == "Devices" ||
                 listItem.title == "Summary" ||
                 listItem.title == "Profile" ? (
-                <Link to={listItem.url} className="listItem" key={listItem.id}>
-                  <img src={listItem.icon} alt="" style={{ width: "20px" }} />
+                <Link
+                  to={listItem.url}
+                  className="listItem"
+                  style={{ color: themeColors.mainColor }}
+                  key={listItem.id}
+                >
+                  <img
+                    src={theme == "dark" ? listItem.icon : listItem.darkIcon}
+                    alt=""
+                    style={{ width: "20px" }}
+                  />
                   <span className="listItemTitle">{listItem.title}</span>
                 </Link>
               ) : null

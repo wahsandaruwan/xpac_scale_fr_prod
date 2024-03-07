@@ -19,8 +19,10 @@ import Circle from "../circle/Circle";
 import DeviceFormPopup from "../DeviceFormPopup/DeviceFormPopup";
 import ImagePopup from "../ImagePopup/ImagePopup";
 import CircularProgressBar from "../CircularProgressBar/CircularProgressBar";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const SingleDevice = () => {
+  const { themeColors } = useTheme();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isImgPopupOpen, setIsImgPopupOpen] = useState(false);
 
@@ -217,7 +219,10 @@ const SingleDevice = () => {
           <div className="info">
             <div className="topInfo">
               <img
-                style={{ cursor: "pointer" }}
+                style={{
+                  cursor: "pointer",
+                  backgroundColor: themeColors.softBg,
+                }}
                 src={
                   DeviceRecentData[0].imageUrl
                     ? `http://104.245.34.253:3300/uploads/${DeviceRecentData[0].imageUrl}`
@@ -226,7 +231,9 @@ const SingleDevice = () => {
                 alt="Device Picture"
                 onClick={openImgPopup}
               />
-              <h1>{DeviceRecentData[0].title}</h1>
+              <h1 style={{ color: themeColors.mainColor }}>
+                {DeviceRecentData[0].title}
+              </h1>
               {UserType == "admin" ? (
                 <button onClick={openForm}>Edit Information</button>
               ) : null}
@@ -255,7 +262,7 @@ const SingleDevice = () => {
                 justifyContent: "flex-start",
               }}
             >
-              <div className="details">
+              <div className="details" style={{ color: themeColors.mainColor }}>
                 <div className="item">
                   <span className="itemTitle">ID : </span>
                   <span className="itemValue">{DeviceRecentData[0]._id}</span>

@@ -269,6 +269,7 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
                 value={InputData.emailStatus}
                 onChange={handleInputChange}
                 className="form-input"
+                style={{ marginBottom: "20px" }}
               >
                 <option value="none" disabled>
                   Send Email
@@ -276,16 +277,6 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
-              {/* <div>
-            <p>Users</p>
-            <div>
-              <div>
-                <div>659e479f798894bd3bea1fe7</div>
-                <div>Kamal Perera</div>
-                <div>Yes</div>
-              </div>
-            </div>
-          </div> */}
               <button type="submit" className="form-button">
                 Save
               </button>

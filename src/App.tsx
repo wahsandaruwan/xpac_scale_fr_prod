@@ -12,13 +12,15 @@ import User from "./pages/user/User";
 import Product from "./pages/product/Product";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Rules from "./pages/rules/Rules";
+import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 
 const queryClient = new QueryClient();
 
 function App() {
   const Layout = () => {
+    const { themeColors } = useTheme();
     return (
-      <div className="main">
+      <div className="main" style={{ backgroundColor: themeColors.mainBg }}>
         <Navbar />
         <div className="container">
           <div className="menuContainer">
@@ -76,7 +78,11 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  );
 }
 
 export default App;

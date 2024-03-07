@@ -1,7 +1,9 @@
 import "./navbar.scss";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const Navbar = () => {
+  const { theme, toggleTheme, themeColors } = useTheme();
   const navigate = useNavigate();
   const logOut = () => {
     const userConfirmed = window.confirm("Do you want to proceed?");
@@ -12,10 +14,14 @@ const Navbar = () => {
     }
   };
   return (
-    <div className="navbar">
+    <div className="navbar" style={{ backgroundColor: themeColors.mainBg }}>
       <div className="logo">
-        <img src="logo.svg" alt="" style={{ width: "50px" }} />
-        <span>XpacScale</span>
+        <img
+          src={theme == "dark" ? "/logo.svg" : "/logodark.svg"}
+          alt=""
+          style={{ width: "50px" }}
+        />
+        <span style={{ color: themeColors.mainColor }}>XpacScale</span>
       </div>
       <div className="icons">
         {/* <img src="/search.svg" alt="" className="icon" />
@@ -33,7 +39,14 @@ const Navbar = () => {
           <span>Jane</span>
         </div> */}
         <img
-          src="/logout.svg"
+          src={theme == "dark" ? "/dark.svg" : "/light.svg"}
+          alt=""
+          className="icon"
+          style={{ width: "30px", cursor: "pointer" }}
+          onClick={toggleTheme}
+        />
+        <img
+          src={theme == "dark" ? "/logout.svg" : "/logoutdark.svg"}
           alt=""
           className="icon"
           style={{ width: "40px", cursor: "pointer" }}

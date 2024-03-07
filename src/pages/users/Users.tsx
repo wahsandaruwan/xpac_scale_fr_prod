@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import UserFormPopup from "../../components/UserFormPopup/UserFormPopup";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const columns: GridColDef[] = [
   {
@@ -69,6 +70,7 @@ const columns: GridColDef[] = [
 ];
 
 const Users = () => {
+  const { themeColors } = useTheme();
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const [UserType, SetUserType] = useState("");
@@ -146,7 +148,7 @@ const Users = () => {
   return (
     <div className="users">
       <div className="info">
-        <h1>All Users</h1>
+        <h1 style={{ color: themeColors.mainColor }}>All Users</h1>
         {UserType == "admin" ? (
           <button onClick={openForm}>Add New User</button>
         ) : null}

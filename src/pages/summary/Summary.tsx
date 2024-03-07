@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SummaryCard from "../../components/summaryCard/SummaryCard";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const Summary = () => {
+  const { themeColors } = useTheme();
   // Devices data
   const [DevicesData, SetDevicesData] = useState<any[]>([]);
   console.log(DevicesData);
@@ -105,7 +107,7 @@ const Summary = () => {
           marginBottom: "30px",
         }}
       >
-        <h1>Summary</h1>
+        <h1 style={{ color: themeColors.mainColor }}>Summary</h1>
         {DevicesData.some((item) => item.deviceData) ? (
           <button
             onClick={() => downloadExcel(DevicesData)}
