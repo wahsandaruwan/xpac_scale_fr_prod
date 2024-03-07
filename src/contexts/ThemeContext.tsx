@@ -40,7 +40,7 @@ const THEME_STORAGE_KEY = "theme";
 const ThemeContext = createContext<ThemeContextProps>({
   theme: "light",
   toggleTheme: () => {},
-  themeColors: darkThemeColors,
+  themeColors: lightThemeColors,
 });
 
 export const useTheme = () => useContext(ThemeContext);
