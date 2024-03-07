@@ -121,6 +121,7 @@
   height: 300px;
   overflow: hidden;
   position: relative;
+  border-radius: 20px;
 }
 
 .banner_profile > img {
@@ -154,8 +155,8 @@
 
 .banner > button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 20px;
   padding: 10px;
   border: 1px solid #2a3447;
   border-radius: 4px;
@@ -163,7 +164,7 @@
 }
 
 .topInfo {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .details_profile {

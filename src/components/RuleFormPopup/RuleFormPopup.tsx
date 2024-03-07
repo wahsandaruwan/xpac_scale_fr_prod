@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import "./ruleForm.scss"; // Import the SCSS file
 import axios from "axios";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface RuleFormPopupProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
   update,
   ruleId,
 }) => {
+  const { themeColors } = useTheme();
   const [InputData, SetInputData] = useState<RuleFormState>({
     userId: "none",
     deviceId: "none",
@@ -221,12 +223,17 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
 
   return (
     <div className={`popup-container ${isOpen ? "open" : "closed"}`}>
-      <div className="popup-content">
+      <div
+        className="popup-content"
+        style={{ backgroundColor: themeColors.softBg }}
+      >
         {LoadingState ? (
           <p>Wait a moment...</p>
         ) : (
           <>
-            <h2 className="heading">{!update ? "Add Rule" : "Update Rule"}</h2>
+            <h2 className="heading" style={{ color: themeColors.mainColor }}>
+              {!update ? "Add Rule" : "Update Rule"}
+            </h2>
             <form onSubmit={handleSubmit}>
               <select
                 name="userId"

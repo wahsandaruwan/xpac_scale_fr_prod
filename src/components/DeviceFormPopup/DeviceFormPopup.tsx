@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import "./deviceForm.scss"; // Import the SCSS file
 import axios from "axios";
 import { useParams } from "react-router-dom";
-// import { useTheme } from "../../contexts/ThemeContext";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface DeviceFormPopupProps {
   isOpen: boolean;
@@ -28,7 +28,7 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
   update,
   onClose,
 }) => {
-  // const { themeColors } = useTheme();
+  const { themeColors } = useTheme();
   const [InputData, SetInputData] = useState<DeviceFormState>({
     title: "",
     assignedProduct: "",
@@ -297,12 +297,15 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
 
   return (
     <div className={`popup-container ${isOpen ? "open" : "closed"}`}>
-      <div className="popup-content">
+      <div
+        className="popup-content"
+        style={{ backgroundColor: themeColors.softBg }}
+      >
         {LoadingState ? (
           <p>Wait a moment...</p>
         ) : (
           <>
-            <h2 className="heading">
+            <h2 className="heading" style={{ color: themeColors.mainColor }}>
               {!update ? "Add Device" : "Update Device"}
             </h2>
             <form onSubmit={handleSubmit}>
@@ -342,7 +345,13 @@ const DeviceFormPopup: React.FC<DeviceFormPopupProps> = ({
                 >
                   Upload Image
                 </button>
-                <p style={{ fontSize: "0.8rem", marginLeft: "10px" }}>
+                <p
+                  style={{
+                    fontSize: "0.8rem",
+                    marginLeft: "10px",
+                    color: themeColors.mainColor,
+                  }}
+                >
                   {ImageName ? ImageName.name : "Not selected any image!"}
                 </p>
               </div>

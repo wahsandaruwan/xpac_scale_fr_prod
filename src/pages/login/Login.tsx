@@ -1,19 +1,19 @@
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ThemeProvider, useTheme } from "../../contexts/ThemeContext";
+import "./login.scss";
 
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
 
 export default function Login() {
+  const { theme, toggleTheme, themeColors } = useTheme();
+
   const [Email, SetEmail] = useState("");
   const [Password, SetPassword] = useState("");
 
@@ -71,12 +71,25 @@ export default function Login() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <div className="main" style={{ paddingTop: "100px" }}>
+    <ThemeProvider>
+      <div
+        className="main-lg"
+        style={{ paddingTop: "100px", backgroundColor: themeColors.mainBg }}
+      >
+        <img
+          src={theme == "dark" ? "/dark.svg" : "/light.svg"}
+          alt=""
+          className="icon"
+          style={{ width: "30px", cursor: "pointer" }}
+          onClick={toggleTheme}
+        />
         <Container
           component="main"
           maxWidth="xs"
-          style={{ backgroundColor: "#ffffff" }}
+          style={{
+            backgroundColor: themeColors.mainColor,
+            borderRadius: "10px",
+          }}
         >
           <CssBaseline />
           <Box
@@ -91,9 +104,9 @@ export default function Login() {
             <Typography
               component="h1"
               variant="h5"
-              style={{ color: "#000000" }}
+              style={{ color: themeColors.mainBg }}
             >
-              Sign in
+              User Login
             </Typography>
             <Box
               component="form"
@@ -101,43 +114,36 @@ export default function Login() {
               noValidate
               sx={{ mt: 1 }}
             >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
+              <input
+                type="text"
                 name="email"
-                autoComplete="email"
-                autoFocus
                 onChange={(e) => SetEmail(e.target.value)}
+                className="form-input"
+                placeholder="Email Address"
+                style={{ borderColor: themeColors.mainBg }}
               />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
+              <input
                 type="password"
-                id="password"
-                autoComplete="current-password"
+                name="password"
                 onChange={(e) => SetPassword(e.target.value)}
+                className="form-input"
+                placeholder="Password"
+                style={{ borderColor: themeColors.mainBg }}
               />
-              <Button
+              <button
                 type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                className="form-button"
                 onClick={(e) => handleSubmit(e)}
+                style={{ borderColor: themeColors.mainBg }}
               >
-                Sign In
-              </Button>
+                Login
+              </button>
 
               <p
                 style={{
                   textAlign: "center",
                   marginBottom: "30px",
-                  color: "#000000",
+                  color: themeColors.mainBg,
                 }}
               >
                 Copyright &copy; XpacScale

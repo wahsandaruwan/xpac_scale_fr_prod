@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import "./userForm.scss"; // Import the SCSS file
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface UserFormPopupProps {
   isOpen: boolean;
@@ -26,6 +27,7 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
   update,
   onClose,
 }) => {
+  const { themeColors } = useTheme();
   const [InputData, SetInputData] = useState<UserFormState>({
     fullName: "",
     emailAddress: "",
@@ -311,12 +313,17 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
 
   return (
     <div className={`popup-container ${isOpen ? "open" : "closed"}`}>
-      <div className="popup-content">
+      <div
+        className="popup-content"
+        style={{ backgroundColor: themeColors.softBg }}
+      >
         {LoadingState ? (
           <p>Wait a moment...</p>
         ) : (
           <>
-            <h2 className="heading">{!update ? "Add User" : "Update User"}</h2>
+            <h2 className="heading" style={{ color: themeColors.mainColor }}>
+              {!update ? "Add User" : "Update User"}
+            </h2>
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
@@ -390,7 +397,13 @@ const UserFormPopup: React.FC<UserFormPopupProps> = ({
                 >
                   Upload Image
                 </button>
-                <p style={{ fontSize: "0.8rem", marginLeft: "10px" }}>
+                <p
+                  style={{
+                    fontSize: "0.8rem",
+                    marginLeft: "10px",
+                    color: themeColors.mainColor,
+                  }}
+                >
                   {ImageName ? ImageName.name : "Not selected any image!"}
                 </p>
               </div>
