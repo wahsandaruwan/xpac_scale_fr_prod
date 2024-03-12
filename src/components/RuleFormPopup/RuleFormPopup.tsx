@@ -228,7 +228,7 @@ const RuleFormPopup: React.FC<RuleFormPopupProps> = ({
         style={{ backgroundColor: themeColors.softBg }}
       >
         {LoadingState ? (
-          <p>Wait a moment...</p>
+          <p style={{ color: themeColors.mainColor }}>Wait a moment...</p>
         ) : (
           <>
             <h2 className="heading" style={{ color: themeColors.mainColor }}>

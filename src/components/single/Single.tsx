@@ -16,6 +16,8 @@ const Single = () => {
 
   const [UserId, SetUserId] = useState("");
 
+  const [UserType, SetUserType] = useState("");
+
   const params = useParams();
   console.log(params);
   console.log(UserId);
@@ -41,6 +43,7 @@ const Single = () => {
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
       SetUserId(storedUser.userId);
+      SetUserType(storedUser.userType);
     }
   }, []);
 
@@ -109,7 +112,9 @@ const Single = () => {
                   onClick={openImgPopup}
                 />
               </div>
-              <button onClick={openForm}>Edit Information</button>
+              {UserType == "admin" || UserId == params.id ? (
+                <button onClick={openForm}>Edit Information</button>
+              ) : null}
             </div>
             <div className="topInfo" style={{ color: themeColors.mainColor }}>
               <h1>{UserData.fullName}</h1>

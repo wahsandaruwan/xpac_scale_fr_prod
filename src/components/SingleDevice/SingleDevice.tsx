@@ -64,17 +64,6 @@ const SingleDevice = () => {
     }
   }, [params.id, isFormOpen]);
 
-  useEffect(() => {
-    const storedUserString = localStorage.getItem("user");
-    if (storedUserString) {
-      const storedUser = JSON.parse(storedUserString);
-      console.log(storedUser);
-      navigate("/products/" + params.id);
-    } else {
-      navigate("/login");
-    }
-  }, []);
-
   const handleChange = (event: SelectChangeEvent) => {
     SetChartType(event.target.value as string);
   };
@@ -345,31 +334,37 @@ const SingleDevice = () => {
                   Icon={"/battery1.svg"}
                   Title={"Battery Percentage"}
                 />
-                <CircularProgressBar
-                  CurrentValue={parseFloat(
-                    DeviceRecentData[0].deviceData.batteryVoltage
-                  )}
-                  StartValue={0}
-                  EndValue={4.5}
-                  LowValue={20}
-                  HighValue={80}
-                  Units={"V"}
-                  InnerColor={"#b583f2"}
-                  TextColor={"#000000"}
-                  Icon={"/voltage1.svg"}
-                  Title={"Battery Voltage"}
-                />
-                <Circle
-                  title="Total Weight"
-                  value={
-                    DeviceRecentData[0].deviceData.totalWeight < 10
-                      ? "0" + DeviceRecentData[0].deviceData.totalWeight + "g"
-                      : DeviceRecentData[0].deviceData.totalWeight + "g"
-                  }
-                  unVal={DeviceRecentData[0].deviceData.totalWeight}
-                  bgColor="#f0f75e"
-                  icon="/weight1.svg"
-                />
+                {UserType == "admin" ? (
+                  <>
+                    <CircularProgressBar
+                      CurrentValue={parseFloat(
+                        DeviceRecentData[0].deviceData.batteryVoltage
+                      )}
+                      StartValue={0}
+                      EndValue={4.5}
+                      LowValue={20}
+                      HighValue={80}
+                      Units={"V"}
+                      InnerColor={"#b583f2"}
+                      TextColor={"#000000"}
+                      Icon={"/voltage1.svg"}
+                      Title={"Battery Voltage"}
+                    />
+                    <Circle
+                      title="Total Weight"
+                      value={
+                        DeviceRecentData[0].deviceData.totalWeight < 10
+                          ? "0" +
+                            DeviceRecentData[0].deviceData.totalWeight +
+                            "g"
+                          : DeviceRecentData[0].deviceData.totalWeight + "g"
+                      }
+                      unVal={DeviceRecentData[0].deviceData.totalWeight}
+                      bgColor="#f0f75e"
+                      icon="/weight1.svg"
+                    />
+                  </>
+                ) : null}
               </div>
             </div>
           </div>

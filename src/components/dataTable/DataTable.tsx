@@ -156,11 +156,11 @@ const DataTable = (props: Props) => {
             <Link to={`/${props.slug}/${params.row._id}`}>
               <img src="/vieweye.svg" alt="" />
             </Link>
-          ) : (
+          ) : UserType == "admin" ? (
             <div className="edit" onClick={() => openRulePopup(params.row._id)}>
               <img src="/edit.svg" alt="" />
             </div>
-          )}
+          ) : null}
           {UserType == "admin" ? (
             <div
               className="delete"
