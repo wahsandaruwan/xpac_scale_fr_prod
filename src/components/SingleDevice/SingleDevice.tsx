@@ -445,13 +445,13 @@ const SingleDevice = () => {
               </ResponsiveContainer>
             </div>
           ) : (
-            <p style={{ marginTop: "20px" }}>
+            <p style={{ marginTop: "20px", color: themeColors.mainColor }}>
               No Data Available to Display the Chart...
             </p>
           )}
         </div>
       ) : (
-        <p>No Data Available...</p>
+        <p style={{ color: themeColors.mainColor }}>No Data Available...</p>
       )}
       <DeviceFormPopup isOpen={isFormOpen} update={true} onClose={closeForm} />
       {DeviceRecentData.length > 0 ? (

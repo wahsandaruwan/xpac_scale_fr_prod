@@ -168,7 +168,7 @@ const Single = () => {
           <hr style={{ marginLeft: "auto", marginRight: "auto" }} />
         </div>
       ) : (
-        <p>No Data Available...</p>
+        <p style={{ color: themeColors.mainColor }}>No Data Available...</p>
       )}
       <UserFormPopup isOpen={isFormOpen} update={true} onClose={closeForm} />
       <ImagePopup
