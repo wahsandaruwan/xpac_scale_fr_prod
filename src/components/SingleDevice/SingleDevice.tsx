@@ -28,9 +28,9 @@ const SingleDevice = () => {
 
   // Device recent data
   const [DeviceRecentData, SetDeviceRecentData] = useState<any[]>([]);
-  console.log(DeviceRecentData);
 
   const [ChartData, SetChartData] = useState([]);
+  console.log(ChartData);
 
   const [UserType, SetUserType] = useState("");
 
@@ -148,8 +148,16 @@ const SingleDevice = () => {
           { headers }
         );
         console.log("first");
-        console.log(response.data.weighingDeviceData[0].deviceData);
-        SetChartData(response.data.weighingDeviceData[0].deviceData);
+        console.log(
+          response.data.weighingDeviceData.length > 0
+            ? response.data.weighingDeviceData[0].deviceData
+            : null
+        );
+        SetChartData(
+          response.data.weighingDeviceData.length > 0
+            ? response.data.weighingDeviceData[0].deviceData
+            : []
+        );
       } catch (error) {
         // Handle errors here
         console.error("Error fetching data:", error);
@@ -174,7 +182,7 @@ const SingleDevice = () => {
     };
   }
 
-  const downloadExcel = async (data: any) => {
+  const downloadExcel = async (data: any, type: any) => {
     const storedUserString = localStorage.getItem("user");
     if (storedUserString) {
       const storedUser = JSON.parse(storedUserString);
@@ -183,16 +191,30 @@ const SingleDevice = () => {
       };
 
       try {
-        const response = await axios.post(
-          "http://104.245.34.253:3300/api/excel/device",
-          data,
-          { headers }
-        );
-        if (response.data.status) {
-          window.open(
-            "http://104.245.34.253:3300/downloads/device_data.xlsx",
-            "_blank"
+        if (type == "single") {
+          const response = await axios.post(
+            "http://104.245.34.253:3300/api/excel/device",
+            data,
+            { headers }
           );
+          if (response.data.status) {
+            window.open(
+              "http://104.245.34.253:3300/downloads/device_data.xlsx",
+              "_blank"
+            );
+          }
+        } else {
+          const response = await axios.post(
+            "http://104.245.34.253:3300/api/excel/current_device_all",
+            data,
+            { headers }
+          );
+          if (response.data.status) {
+            window.open(
+              "http://104.245.34.253:3300/downloads/all_data_of_current_device.xlsx",
+              "_blank"
+            );
+          }
         }
       } catch (error) {
         // Handle errors here
@@ -228,20 +250,23 @@ const SingleDevice = () => {
               ) : null}
               <button
                 onClick={() =>
-                  downloadExcel({
-                    id: DeviceRecentData[0]._id,
-                    title: DeviceRecentData[0].title,
-                    assignedProduct: DeviceRecentData[0].assignedProduct,
-                    itemCount: DeviceRecentData[0].deviceData.itemCount,
-                    totalWeight: DeviceRecentData[0].deviceData.totalWeight,
-                    batteryPercentage:
-                      DeviceRecentData[0].deviceData.batteryPercentage,
-                    batteryVoltage:
-                      DeviceRecentData[0].deviceData.batteryVoltage,
-                  })
+                  downloadExcel(
+                    {
+                      id: DeviceRecentData[0]._id,
+                      title: DeviceRecentData[0].title,
+                      assignedProduct: DeviceRecentData[0].assignedProduct,
+                      itemCount: DeviceRecentData[0].deviceData.itemCount,
+                      totalWeight: DeviceRecentData[0].deviceData.totalWeight,
+                      batteryPercentage:
+                        DeviceRecentData[0].deviceData.batteryPercentage,
+                      batteryVoltage:
+                        DeviceRecentData[0].deviceData.batteryVoltage,
+                    },
+                    "single"
+                  )
                 }
               >
-                Download Excel
+                Download Recent Data as Excel
               </button>
             </div>
             <div
@@ -369,21 +394,31 @@ const SingleDevice = () => {
             </div>
           </div>
           <hr />
-          <FormControl style={{ width: "200px" }}>
-            <InputLabel id="demo-simple-select-label">Chart Type</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={ChartType}
-              label="Chart Type"
-              onChange={handleChange}
-            >
-              <MenuItem value="monthly">Monthly</MenuItem>
-              <MenuItem value="weekly">Weekly</MenuItem>
-              <MenuItem value="daily">Daily</MenuItem>
-            </Select>
-          </FormControl>
-          {ChartData.length > 0 && (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <FormControl style={{ width: "200px" }}>
+              <InputLabel id="demo-simple-select-label">Chart Type</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={ChartType}
+                label="Chart Type"
+                onChange={handleChange}
+              >
+                <MenuItem value="monthly">Month</MenuItem>
+                <MenuItem value="weekly">Week</MenuItem>
+                <MenuItem value="daily">Day</MenuItem>
+              </Select>
+            </FormControl>
+            {ChartData.length > 0 ? (
+              <button
+                onClick={() => downloadExcel(ChartData, "all")}
+                style={{ marginLeft: "30px" }}
+              >
+                Download All Data as Excel
+              </button>
+            ) : null}
+          </div>
+          {ChartData.length > 0 ? (
             <div className="chart">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
@@ -409,6 +444,10 @@ const SingleDevice = () => {
                 </LineChart>
               </ResponsiveContainer>
             </div>
+          ) : (
+            <p style={{ marginTop: "20px" }}>
+              No Data Available to Display the Chart...
+            </p>
           )}
         </div>
       ) : (
